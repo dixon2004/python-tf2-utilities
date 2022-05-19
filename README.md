@@ -4,7 +4,7 @@ Inspired by [TF2autobot's node-tf2-schema](https://github.com/TF2Autobot/node-tf
 
 ## Installation
 ```py
-pip install tf2utilities
+pip install tf2-utilities
 ```
 
 ## Examples
