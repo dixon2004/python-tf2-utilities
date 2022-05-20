@@ -1211,7 +1211,7 @@ class Schema:
 
         if item.get("australium") is True: name += "Australium"
 
-        if item.get("paintkit") and type(item["paintkit"]) == int: name += self.getSkinById(item["paintkit"]) + " | "
+        if item.get("paintkit") and type(item["paintkit"]) == int: name += self.getSkinById(item["paintkit"]) + " "
 
         if proper is True and name == "" and schemaItem["proper_name"] is True: name = "The "
 
