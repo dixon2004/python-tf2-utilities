@@ -450,6 +450,9 @@ class Schema:
             particleName = particle["name"].lower()
             if particleName != previous:
                 effects.update({str(particleName): int(particle["id"])})
+                if particleName == "eerie orbiting fire":
+                    del effects["orbiting fire"]
+                    effects.update({"orbiting fire": 33})
             previous = particleName  
 
         excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
