@@ -4,6 +4,7 @@ import requests
 import time
 import math
 import vdf
+import re
 
 
 munitionCrate = {
@@ -1233,7 +1234,10 @@ class Schema:
 
     # Gets name
     def getNameFromSku(self, sku):
-        return self.getName(SKU.fromString(sku))
+        if testSKU(sku) is True:
+            return self.getName(SKU.fromString(sku))
+        else:
+            return None
 
 
     # Gets schema overview
@@ -1309,3 +1313,10 @@ def getAllSchemaItems(apiKey):
         result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
         items = items + result["result"]["items"]
     return items
+
+
+def testSKU(sku):
+    if bool(re.match(
+        "^(\d+);([0-9]|[1][0-5])(;((uncraftable)|(untrad(e)?able)|(australium)|(festive)|(strange)|((u|pk|td-|c|od-|oq-|p)\d+)|(w[1-5])|(kt-[1-3])|(n((100)|[1-9]\d?))))*?$", sku)):
+        return True
+        
