@@ -1,31 +1,26 @@
-TEMPLATE = {
-    "defindex": 0,
-    "quality": 0,
-    "craftable": True,
-    "tradable": True,
-    "killstreak": 0,
-    "australium": False,
-    "effect": None,
-    "festive": False,
-    "paintkit": None,
-    "wear": None,
-    "quality2": None,
-    "craftnumber": None,
-    "crateseries": None,
-    "target": None,
-    "output": None,
-    "outputQuality": None,
-    "paint": None
-}
-
-
-# Format items as strings or objects
-
-
 class SKU:
     # Convert SKU to item object
     @staticmethod
     def fromString(sku):
+        TEMPLATE = {
+            "defindex": 0,
+            "quality": 0,
+            "craftable": True,
+            "tradable": True,
+            "killstreak": 0,
+            "australium": False,
+            "effect": None,
+            "festive": False,
+            "paintkit": None,
+            "wear": None,
+            "quality2": None,
+            "craftnumber": None,
+            "crateseries": None,
+            "target": None,
+            "output": None,
+            "outputQuality": None,
+            "paint": None
+        }
         attributes = {}
         
         parts = sku.split(";")
@@ -84,6 +79,25 @@ class SKU:
     # Convert item object to SKU
     @staticmethod
     def fromObject(item):
+        TEMPLATE = {
+            "defindex": 0,
+            "quality": 0,
+            "craftable": True,
+            "tradable": True,
+            "killstreak": 0,
+            "australium": False,
+            "effect": None,
+            "festive": False,
+            "paintkit": None,
+            "wear": None,
+            "quality2": None,
+            "craftnumber": None,
+            "crateseries": None,
+            "target": None,
+            "output": None,
+            "outputQuality": None,
+            "paint": None
+        }
         for attr in TEMPLATE:
             if attr in item: TEMPLATE[attr] = item[attr]
 
