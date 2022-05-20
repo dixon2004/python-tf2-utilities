@@ -669,7 +669,7 @@ class Schema:
 
         else:
             name = name.replace(" series ", "").replace(" series#", " #")
-            if "mann co. supply crate #" in name:
+            if name.startswith('mann co. supply crate #'):
                 crateseries = int(name[23:])
                 if crateseries in [1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75]:
                     item["defindex"] = 5022
