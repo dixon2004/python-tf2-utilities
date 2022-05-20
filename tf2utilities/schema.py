@@ -20,216 +20,216 @@ munitionCrate = {
 
 
 pistolSkins = {
-    "0": 15013,
-    "18": 15018,
-    "35": 15035,
-    "41": 15041,
-    "46": 15046,
-    "56": 15056,
-    "61": 15061,
-    "63": 15060,
-    "69": 15100,
-    "70": 15101,
-    "74": 15102,
-    "78": 15126,
-    "81": 15148
+	"0": 15013,
+	"18": 15018,
+	"35": 15035,
+	"41": 15041,
+	"46": 15046,
+	"56": 15056,
+	"61": 15061,
+	"63": 15060,
+	"69": 15100,
+	"70": 15101,
+	"74": 15102,
+	"78": 15126,
+	"81": 15148
 }
 
 
 rocketLauncherSkins = {
-    "1": 15014,
-    "6": 15006,
-    "28": 15028,
-    "43": 15043,
-    "52": 15052,
-    "57": 15057,
-    "60": 15081,
-    "69": 15104,
-    "70": 15105,
-    "93": 15129,
-    "79": 15130,
-    "80": 15150
+	"1": 15014,
+	"6": 15006,
+	"28": 15028,
+	"43": 15043,
+	"52": 15052,
+	"57": 15057,
+	"60": 15081,
+	"69": 15104,
+	"70": 15105,
+	"76": 15129,
+	"79": 15130,
+	"80": 15150
 }
 
 
 medicgunSkins = {
-    "2": 15010,
-    "5": 15008,
-    "25": 15025,
-    "39": 15039,
-    "50": 15050,
-    "65": 15078,
-    "72": 15097,
-    "93": 15120,
-    "78": 15121,
-    "79": 15122,
-    "81": 15145,
-    "83": 15146
+	"2": 15010,
+	"5": 15008,
+	"25": 15025,
+	"39": 15039,
+	"50": 15050,
+	"65": 15078,
+	"72": 15097,
+	"76": 15120,
+	"78": 15121,
+	"79": 15122,
+	"81": 15145,
+	"83": 15146
 }
 
 
 revolverSkins = {
-    "3": 15011,
-    "27": 15027,
-    "42": 15042,
-    "51": 15051,
-    "63": 15064,
-    "64": 15062,
-    "65": 15063,
-    "72": 15103,
-    "93": 15127,
-    "77": 15128,
-    "81": 15149
+	"3": 15011,
+	"27": 15027,
+	"42": 15042,
+	"51": 15051,
+	"63": 15064,
+	"64": 15062,
+	"65": 15063,
+	"72": 15103,
+	"76": 15127,
+	"77": 15128,
+	"81": 15149
 }
 
 
 stickybombSkins = {
-    "4": 15012,
-    "8": 15009,
-    "24": 15024,
-    "38": 15038,
-    "45": 15045,
-    "48": 15048,
-    "60": 15082,
-    "62": 15083,
-    "63": 15084,
-    "68": 15113,
-    "93": 15137,
-    "78": 15138,
-    "81": 15155
+	"4": 15012,
+	"8": 15009,
+	"24": 15024,
+	"38": 15038,
+	"45": 15045,
+	"48": 15048,
+	"60": 15082,
+	"62": 15083,
+	"63": 15084,
+	"68": 15113,
+	"76": 15137,
+	"78": 15138,
+	"81": 15155
 }
 
 
 sniperRifleSkins = {
-    "7": 15007,
-    "14": 15000,
-    "19": 15019,
-    "23": 15023,
-    "33": 15033,
-    "59": 15059,
-    "62": 15070,
-    "64": 15071,
-    "65": 15072,
-    "93": 15135,
-    "66": 15111,
-    "91": 15112,
-    "78": 15136,
-    "82": 15154
+	"7": 15007,
+	"14": 15000,
+	"19": 15019,
+	"23": 15023,
+	"33": 15033,
+	"59": 15059,
+	"62": 15070,
+	"64": 15071,
+	"65": 15072,
+	"76": 15135,
+	"66": 15111,
+	"67": 15112,
+	"78": 15136,
+	"82": 15154
 }
 
 
 flameThrowerSkins = {
-    "9": 15005,
-    "17": 15017,
-    "30": 15030,
-    "34": 15034,
-    "49": 15049,
-    "54": 15054,
-    "60": 15066,
-    "61": 15068,
-    "62": 15067,
-    "66": 15089,
-    "91": 15090,
-    "93": 15115,
-    "80": 15141
+	"9": 15005,
+	"17": 15017,
+	"30": 15030,
+	"34": 15034,
+	"49": 15049,
+	"54": 15054,
+	"60": 15066,
+	"61": 15068,
+	"62": 15067,
+	"66": 15089,
+	"67": 15090,
+	"76": 15115,
+	"80": 15141
 }
 
 
 minigunSkins = {
-    "10": 15004,
-    "20": 15020,
-    "26": 15026,
-    "31": 15031,
-    "40": 15040,
-    "55": 15055,
-    "61": 15088,
-    "62": 15087,
-    "63": 15086,
-    "70": 15098,
-    "73": 15099,
-    "93": 15123,
-    "77": 15125,
-    "78": 15124,
-    "84": 15147
+	"10": 15004,
+	"20": 15020,
+	"26": 15026,
+	"31": 15031,
+	"40": 15040,
+	"55": 15055,
+	"61": 15088,
+	"62": 15087,
+	"63": 15086,
+	"70": 15098,
+	"73": 15099,
+	"76": 15123,
+	"77": 15125,
+	"78": 15124,
+	"84": 15147
 }
 
 
 scattergunSkins = {
-    "11": 15002,
-    "15": 15015,
-    "21": 15021,
-    "29": 15029,
-    "36": 15036,
-    "53": 15053,
-    "61": 15069,
-    "63": 15065,
-    "69": 15106,
-    "72": 15107,
-    "74": 15108,
-    "93": 15131,
-    "83": 15157,
-    "92": 15151
+	"11": 15002,
+	"15": 15015,
+	"21": 15021,
+	"29": 15029,
+	"36": 15036,
+	"53": 15053,
+	"61": 15069,
+	"63": 15065,
+	"69": 15106,
+	"72": 15107,
+	"74": 15108,
+	"76": 15131,
+	"83": 15157,
+	"85": 15151
 }
 
 
 shotgunSkins = {
-    "12": 15003,
-    "16": 15016,
-    "44": 15044,
-    "47": 15047,
-    "60": 15085,
-    "72": 15109,
-    "93": 15132,
-    "78": 15133,
-    "86": 15152
+	"12": 15003,
+	"16": 15016,
+	"44": 15044,
+	"47": 15047,
+	"60": 15085,
+	"72": 15109,
+	"76": 15132,
+	"78": 15133,
+	"86": 15152
 }
 
 
 smgSkins = {
-    "13": 15001,
-    "22": 15022,
-    "32": 15032,
-    "37": 15037,
-    "58": 15058,
-    "65": 15076,
-    "69": 15110,
-    "79": 15134,
-    "81": 15153
+	"13": 15001,
+	"22": 15022,
+	"32": 15032,
+	"37": 15037,
+	"58": 15058,
+	"65": 15076,
+	"69": 15110,
+	"79": 15134,
+	"81": 15153
 }
 
 
 wrenchSkins = {
-    "60": 15074,
-    "61": 15073,
-    "64": 15075,
-    "75": 15114,
-    "77": 15140,
-    "78": 15139,
-    "82": 15156
+	"60": 15074,
+	"61": 15073,
+	"64": 15075,
+	"75": 15114,
+	"77": 15140,
+	"78": 15139,
+	"82": 15156
 }
 
 
 grenadeLauncherSkins = {
-    "60": 15077,
-    "63": 15079,
-    "91": 15091,
-    "68": 15092,
-    "93": 15116,
-    "77": 15117,
-    "80": 15142,
-    "84": 15158
+	"60": 15077,
+	"63": 15079,
+	"67": 15091,
+	"68": 15092,
+	"76": 15116,
+	"77": 15117,
+	"80": 15142,
+	"84": 15158
 }
 
 
 knifeSkins = {
-    "64": 15080,
-    "69": 15094,
-    "70": 15095,
-    "71": 15096,
-    "77": 15119,
-    "78": 15118,
-    "81": 15143,
-    "82": 15144
+	"64": 15080,
+	"69": 15094,
+	"70": 15095,
+	"71": 15096,
+	"77": 15119,
+	"78": 15118,
+	"81": 15143,
+	"82": 15144
 }
 
 
@@ -477,7 +477,7 @@ class Schema:
                 continue
             if effect == "cool" and not item.get("wear"):
                 continue
-            if effect in name:
+            if effect in name and "shot in the dark" not in name:
                 name = name.replace(effect, "", 1).strip()
                 item["effect"] = effects[effect]
                 if  item["effect"] == 4:
@@ -490,72 +490,72 @@ class Schema:
                 break
 
         if item.get("wear"):
-            paintkits = {schema["paintkits"][paintkit].lower(): paintkit for paintkit in schema["paintkits"]}
+            paintkits = {schema["paintkits"][paintkit].lower(): int(paintkit) for paintkit in schema["paintkits"]}
             for paintkit in paintkits:
-                if "mk.ii" in name and "mk.ii" not in name:
+                if "mk.ii" in name and "mk.ii" not in paintkit:
                     continue
                 if paintkit in name:
-                    name = name.replace(paintkit, "").replace(" | ", "").strip()
+                    name = name.replace(paintkit, "").replace("|", "").strip()
                     item["paintkit"] = paintkits[paintkit]
                     if not item.get("effect"):
-                        if item["quality2"] == 11:
+                        if item.get("quality2") == 11:
                             item["quality"] = 11
                             item["quality2"] = None
                         else:
                             item["quality"] = 15
                     else:
-                        if item["quality2"] == 11:
+                        if item.get("quality2") == 11:
                             item["quality"] == 11
                             item["quality2"] = None
                     break
 
-            if "War Paint" not in name:
+            if "war paint" not in name:
                 oldDefindex = item["defindex"]
-                if (item["paintkit"] >= 0 and item["paintkit"] <= 66) or (item["paintkit"] >= 68 and item["paintkit"] <= 75) or (item["paintkit"] >= 77 and item["paintkit"] <= 84) or item["paintkit"] in [86, 91, 92, 93]:
+                if (int(item["paintkit"]) >= 0 and int(item["paintkit"]) <= 66) or (int(item["paintkit"]) >= 68 and int(item["paintkit"]) <= 75) or (int(item["paintkit"]) >= 77 and int(item["paintkit"]) <= 84) or int(item["paintkit"]) in [86, 67, 85, 76]:
                     # Special Skins, but still need to filter because not everything is special
                     # TODO: Investigate whether this also the reason we have two Strange variants for skins?
                     if 'pistol' in name:
-                        if item['paintkit'] in pistolSkins:
-                            item['defindex'] = pistolSkins[item['paintkit']]
+                        if str(item['paintkit']) in pistolSkins:
+                            item['defindex'] = pistolSkins[str(item['paintkit'])]
                     elif 'rocket launcher' in name:
-                        if item['paintkit'] in rocketLauncherSkins:
-                            item['defindex'] = rocketLauncherSkins[item['paintkit']]
+                        if str(item['paintkit']) in rocketLauncherSkins:
+                            item['defindex'] = rocketLauncherSkins[str(item['paintkit'])]
                     elif 'medi gun' in name:
-                        if item['paintkit'] in medicgunSkins:
-                            item['defindex'] = medicgunSkins[item['paintkit']]
+                        if str(item['paintkit']) in medicgunSkins:
+                            item['defindex'] = medicgunSkins[str(item['paintkit'])]
                     elif 'revolver' in name:
-                        if item['paintkit'] in revolverSkins:
-                            item['defindex'] = revolverSkins[item['paintkit']]
+                        if str(item['paintkit']) in revolverSkins:
+                            item['defindex'] = revolverSkins[str(item['paintkit'])]
                     elif 'stickybomb launcher' in name:
-                        if item['paintkit'] in stickybombSkins:
-                            item['defindex'] = stickybombSkins[item['paintkit']]
+                        if str(item['paintkit']) in stickybombSkins:
+                            item['defindex'] = stickybombSkins[str(item['paintkit'])]
                     elif 'sniper rifle' in name:
-                        if item['paintkit'] in sniperRifleSkins:
-                            item['defindex'] = sniperRifleSkins[item['paintkit']]
+                        if str(item['paintkit']) in sniperRifleSkins:
+                            item['defindex'] = sniperRifleSkins[str(item['paintkit'])]
                     elif 'flame thrower' in name:
-                        if item['paintkit'] in flameThrowerSkins:
-                            item['defindex'] = flameThrowerSkins[item['paintkit']]
+                        if str(item['paintkit']) in flameThrowerSkins:
+                            item['defindex'] = flameThrowerSkins[str(item['paintkit'])]
                     elif 'minigun' in name:
-                        if item['paintkit'] in minigunSkins:
-                            item['defindex'] = minigunSkins[item['paintkit']]
+                        if str(item['paintkit']) in minigunSkins:
+                            item['defindex'] = minigunSkins[str(item['paintkit'])]
                     elif 'scattergun' in name:
-                        if item['paintkit'] in scattergunSkins:
-                            item['defindex'] = scattergunSkins[item['paintkit']]
+                        if str(item['paintkit']) in scattergunSkins:
+                            item['defindex'] = scattergunSkins[str(item['paintkit'])]
                     elif 'shotgun' in name:
-                        if item['paintkit'] in shotgunSkins:
-                            item['defindex'] = shotgunSkins[item['paintkit']]
+                        if str(item['paintkit']) in shotgunSkins:
+                            item['defindex'] = shotgunSkins[str(item['paintkit'])]
                     elif 'smg' in name:
-                        if item['paintkit'] in smgSkins:
-                            item['defindex'] = smgSkins[item['paintkit']]
+                        if str(item['paintkit']) in smgSkins:
+                            item['defindex'] = smgSkins[str(item['paintkit'])]
                     elif 'grenade launcher' in name:
-                        if item['paintkit'] in grenadeLauncherSkins:
-                            item['defindex'] = grenadeLauncherSkins[item['paintkit']]
+                        if str(item['paintkit']) in grenadeLauncherSkins:
+                            item['defindex'] = grenadeLauncherSkins[str(item['paintkit'])]
                     elif 'wrench' in name:
-                        if item['paintkit'] in wrenchSkins:
-                            item['defindex'] = wrenchSkins[item['paintkit']]
+                        if str(item['paintkit']) in wrenchSkins:
+                            item['defindex'] = wrenchSkins[str(item['paintkit'])]
                     elif 'knife' in name:
-                        if item['paintkit'] in knifeSkins:
-                            item['defindex'] = knifeSkins[item['paintkit']]
+                        if str(item['paintkit']) in knifeSkins:
+                            item['defindex'] = knifeSkins[str(item['paintkit'])]
                 if oldDefindex != item["defindex"]: return item
 
         if "(paint: " in name:
@@ -1319,4 +1319,3 @@ def testSKU(sku):
     if bool(re.match(
         "^(\d+);([0-9]|[1][0-5])(;((uncraftable)|(untrad(e)?able)|(australium)|(festive)|(strange)|((u|pk|td-|c|od-|oq-|p)\d+)|(w[1-5])|(kt-[1-3])|(n((100)|[1-9]\d?))))*?$", sku)):
         return True
-        
