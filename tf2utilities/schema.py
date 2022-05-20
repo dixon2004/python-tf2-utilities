@@ -473,7 +473,7 @@ class Schema:
             if effect == "cool" and not item.get("wear"):
                 continue
             if effect in name:
-                name = name.replace(effect, "").strip()
+                name = name.replace(effect, "", 1).strip()
                 item["effect"] = effects[effect]
                 if  item["effect"] == 4:
                     if item["quality"] is None:
