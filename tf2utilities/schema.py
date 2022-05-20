@@ -451,11 +451,10 @@ class Schema:
         for effect in effects:
             if effect == "showstopper" and "taunt: " not in name:
                 # if the effect is Showstopper and name does not include "Taunt: " or "Shred Alert", skip it
-                if "shred alert" not in name:
-                    continue
-            if effect == "smoking" and name in ["smoking jacket", "smoking skid lid", "the smoking skid lid"]:
+                if "shred alert" not in name: continue
+            if effect == "smoking" and (name == "smoking jacket" or "smoking skid lid" in name or name == "the smoking skid lid"):
                 # if name only Smoking Jacket or Smoking Skid Lid without effect Smoking, then continue
-                continue
+                if not name.startswith("smoking smoking"): continue
             if effect == "haunted ghosts" and "haunted ghosts" in name and item.get("wear"):
                 # if item name includes Haunted Ghosts and wear is defined, skip cosmetic effect and find warpaint for weapon
                 continue
