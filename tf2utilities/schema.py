@@ -440,6 +440,10 @@ class Schema:
                 if particleName == "eerie orbiting fire":
                     del effects["orbiting fire"]
                     effects.update({"orbiting fire": 33})
+
+                if particleName == "nether trail":
+                    del effects["ether trail"]
+                    effects.update({"ether trail": 103})
             previous = particleName  
 
         excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
