@@ -444,6 +444,10 @@ class Schema:
                 if particleName == "nether trail":
                     del effects["ether trail"]
                     effects.update({"ether trail": 103})
+
+                if particleName == "refragmenting reality":
+                    del effects["fragmenting reality"]
+                    effects.update({"fragmenting reality": 141})
             previous = particleName  
 
         excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
