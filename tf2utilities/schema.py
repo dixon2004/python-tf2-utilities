@@ -445,9 +445,10 @@ class Schema:
         excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
 
         for effect in effects:
-            if effect == "showstopper" and ("taunt: " not in name or "shred alert" not in name):
+            if effect == "showstopper" and "taunt: " not in name:
                 # if the effect is Showstopper and name does not include "Taunt: " or "Shred Alert", skip it
-                continue
+                if "shred alert" not in name:
+                    continue
             if effect == "smoking" and name in ["smoking jacket", "smoking skid lid", "the smoking skid lid"]:
                 # if name only Smoking Jacket or Smoking Skid Lid without effect Smoking, then continue
                 continue
