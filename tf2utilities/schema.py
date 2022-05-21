@@ -7,16 +7,16 @@ import vdf
 import re
 
 
-munitionCrate = {
-    "82": 5734,
-    "83": 5735,
-    "84": 5742,
-    "85": 5752,
-    "90": 5781,
-    "91": 5802,
-    "92": 5803,
-    "103": 5859
-}
+# munitionCrate = {
+#     "82": 5734,
+#     "83": 5735,
+#     "84": 5742,
+#     "85": 5752,
+#     "90": 5781,
+#     "91": 5802,
+#     "92": 5803,
+#     "103": 5859
+# }
 
 
 pistolSkins = {
@@ -290,6 +290,7 @@ class Schema:
         self.raw = data["raw"] or None
         self.time = data["time"] or time.time()
         self.crateSeriesList = self.getCrateSeriesList()
+        self.munitionCratesList = self.getMunitionCratesList()
 
 
     def getItemByNameWithThe(self, name):
@@ -669,7 +670,13 @@ class Schema:
 
         else:
             name = name.replace(" series ", "").replace(" series#", " #")
-            if name.startswith('mann co. supply crate #'):
+            if "salvaged mann co. supply crate #" in name:
+                item["crateseries"] = int(name[32:])
+                item["defindex"] = 5068
+                item["quality"] = 6
+                return item
+
+            elif "mann co. supply crate #" in name:
                 crateseries = int(name[23:])
                 if crateseries in [1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75]:
                     item["defindex"] = 5022
@@ -683,14 +690,8 @@ class Schema:
 
             elif "mann co. supply munition #" in name:
                 crateseries = int(name[26:])
-                item["defindex"] = munitionCrate.get(crateseries)
+                item["defindex"] = self.munitionCratesList.get(str(crateseries))
                 item["crateseries"] = crateseries
-                item["quality"] = 6
-                return item
-
-            elif "salvaged mann co. supply crate #" in name:
-                item["crateseries"] = int(name[32:])
-                item["defindex"] = 5068
                 item["quality"] = 6
                 return item
 
@@ -1140,7 +1141,7 @@ class Schema:
                 item["outputQuality"] is not None or
                 item["paint"] is not None
             )
-        if schemaItem["item_class"] == "supply_crate" and item.get("crateseries"):
+        if schemaItem["item_class"] == "supply_crate" and item.get("crateseries") is None:
             if item["defindex"] not in [5739, 5760, 5737, 5738]:
                 # If not seriesless, return false
                 # Mann Co. Director's Cut Reel, Mann Co. Audition Reel, and Mann Co. Stockpile Crate
@@ -1168,7 +1169,7 @@ class Schema:
                 (item["crateseries"] in [2, 4, 8, 11, 14, 17, 20, 24, 27, 32, 37, 42, 44, 49, 56, 71, 76] and item["defindex"] == 5041) or
                 (item["crateseries"] in [5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77] and item["defindex"] == 5045) or
                 (item["crateseries"] in [30, 40, 50] and item["defindex"] == 5068) or
-                (munitionCrate.get(item["crateseries"]) and item["defindex"] == munitionCrate.get(item["crateseries"]))):
+                (self.munitionCratesList.get(str(item["crateseries"])) and item["defindex"] == self.munitionCratesList.get(str(item["crateseries"])))):
                 # if single defindex multiple series crate don't match, does not exist
                 return False
 
@@ -1234,10 +1235,27 @@ class Schema:
 
     # Gets name
     def getNameFromSku(self, sku):
-        if testSKU(sku) is True:
+        if self.testSKU(sku) is True:
             return self.getName(SKU.fromString(sku))
         else:
             return None
+
+    
+    # Check sku if it's valid or not
+    def testSKU(self, sku):
+        if bool(re.match(
+            "^(\d+);([0-9]|[1][0-5])(;((uncraftable)|(untrad(e)?able)|(australium)|(festive)|(strange)|((u|pk|td-|c|od-|oq-|p)\d+)|(w[1-5])|(kt-[1-3])|(n((100)|[1-9]\d?))))*?$", sku)):
+            return True
+
+    
+    # Gets munition crate list
+    def getMunitionCratesList(self):
+        munitionCratesList = {}
+        items = self.raw["schema"]["items"]
+        for item in items:
+            if item["item_name"] == "Mann Co. Supply Munition":
+                munitionCratesList.update({str(item["attributes"][0]["value"]): int(item["defindex"])})
+        return munitionCratesList
 
 
     # Gets schema overview
@@ -1313,9 +1331,3 @@ def getAllSchemaItems(apiKey):
         result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
         items = items + result["result"]["items"]
     return items
-
-
-def testSKU(sku):
-    if bool(re.match(
-        "^(\d+);([0-9]|[1][0-5])(;((uncraftable)|(untrad(e)?able)|(australium)|(festive)|(strange)|((u|pk|td-|c|od-|oq-|p)\d+)|(w[1-5])|(kt-[1-3])|(n((100)|[1-9]\d?))))*?$", sku)):
-        return True
