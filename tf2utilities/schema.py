@@ -679,11 +679,11 @@ class Schema:
 
             elif "mann co. supply crate #" in name:
                 crateseries = int(name[23:])
-                if crateseries in [1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75]:
+                if crateseries in {1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75}:
                     item["defindex"] = 5022
-                elif crateseries in [2, 4, 8, 11, 14, 17, 20, 24, 27, 32, 37, 42, 44, 49, 56, 71, 76]:
+                elif crateseries in {2, 4, 8, 11, 14, 17, 20, 24, 27, 32, 37, 42, 44, 49, 56, 71, 76}:
                     item["defindex"] = 5041
-                elif crateseries in [5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77]:
+                elif crateseries in {5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77}:
                     item["defindex"] = 5045
                 item["crateseries"] = crateseries
                 item["quality"] = 6
@@ -955,7 +955,7 @@ class Schema:
     
     # Gets the name of partial sku for strange parts items
     def getStrangeParts(self):
-        partsToExclude = [
+        partsToExclude = {
             'Ubers',
             'Kill Assists',
             'Sentry Kills',
@@ -996,7 +996,7 @@ class Schema:
             'Power Up Canteens Used',
             'Contract Points Earned',
             'Contract Points Contributed To Friends'
-        ]
+        }
 
         toObject = {}
 
@@ -1013,7 +1013,7 @@ class Schema:
 
     # Get an array of item objects for craftable weapons
     def getCraftableWeaponsSchema(self):
-        weaponsToExclude = [
+        weaponsToExclude = {
             # Exclude these weapons
             266, # Horseless Headless Horsemann's Headtaker
             452, # Three-Rune Blade
@@ -1034,7 +1034,7 @@ class Schema:
             1013, # Ham Shank
             1152, # Grappling Hook
             30474 # Nostromo Napalmer
-        ]
+        }
 
         craftableWeapons = []
         for item in self.raw["schema"]["items"]:
@@ -1045,7 +1045,7 @@ class Schema:
 
     # Get an array of SKU for craftable weapons by class used for crafting
     def getWeaponsForCraftingByClass(self, charClass):
-        if charClass not in ['Scout', 'Soldier', 'Pyro', 'Demoman', 'Heavy', 'Engineer', 'Medic', 'Sniper', 'Spy']:
+        if charClass not in {'Scout', 'Soldier', 'Pyro', 'Demoman', 'Heavy', 'Engineer', 'Medic', 'Sniper', 'Spy'}:
             raise Exception(f'Entered class "{charClass}" is not a valid character class.\nValid character classes (case sensitive): "Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy".')
         
         weapons = []
@@ -1104,7 +1104,7 @@ class Schema:
         if not schemaItem: return False
 
         # Items with default quality
-        if schemaItem["item_quality"] in [0, 3, 5, 11]:
+        if schemaItem["item_quality"] in {0, 3, 5, 11}:
             # default Normal (Stock items), Vintage (1156), Unusual (266, 267), and Strange (655) items
             if item.get("quality") != schemaItem["item_quality"]: return False
 
@@ -1143,7 +1143,7 @@ class Schema:
                 item["paint"] is not None
             )
         if schemaItem["item_class"] == "supply_crate" and item.get("crateseries") is None:
-            if item["defindex"] not in [5739, 5760, 5737, 5738]:
+            if item["defindex"] not in {5739, 5760, 5737, 5738}:
                 # If not seriesless, return false
                 # Mann Co. Director's Cut Reel, Mann Co. Audition Reel, and Mann Co. Stockpile Crate
                 return False
@@ -1156,9 +1156,9 @@ class Schema:
             if schemaItem["item_class"] != "supply_crate":
                 # Not a crate or case
                 return False
-            elif (item["crateseries"] not in [1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75, 2, 4, 8, 11, 14, 17, 20, 24, 27,
+            elif (item["crateseries"] not in {1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75, 2, 4, 8, 11, 14, 17, 20, 24, 27,
                 32, 37, 42, 44, 49, 56, 71, 76, 5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77, 30,
-                40, 50, 82, 83, 84, 85, 90, 91, 92, 103]):
+                40, 50, 82, 83, 84, 85, 90, 91, 92, 103}):
                 # if item["crateseries"] not included in the single defindex multiple series crate:
                 if item["crateseries"] not in [self.crateSeriesList[cratesSeries] for cratesSeries in self.crateSeriesList]:
                     # if item["crateseries"] is not included in the crateSeriesList, does not exist.
@@ -1166,10 +1166,10 @@ class Schema:
                 # Check for specific crates/cases
                 if item["crateseries"] != self.crateSeriesList[item["defindex"]]: return False
             elif not (
-                (item["crateseries"] in [1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75] and item["defindex"] == 5022) or
-                (item["crateseries"] in [2, 4, 8, 11, 14, 17, 20, 24, 27, 32, 37, 42, 44, 49, 56, 71, 76] and item["defindex"] == 5041) or
-                (item["crateseries"] in [5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77] and item["defindex"] == 5045) or
-                (item["crateseries"] in [30, 40, 50] and item["defindex"] == 5068) or
+                (item["crateseries"] in {1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75} and item["defindex"] == 5022) or
+                (item["crateseries"] in {2, 4, 8, 11, 14, 17, 20, 24, 27, 32, 37, 42, 44, 49, 56, 71, 76} and item["defindex"] == 5041) or
+                (item["crateseries"] in {5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77} and item["defindex"] == 5045) or
+                (item["crateseries"] in {30, 40, 50} and item["defindex"] == 5068) or
                 (self.munitionCratesList.get(str(item["crateseries"])) and item["defindex"] == self.munitionCratesList.get(str(item["crateseries"])))):
                 # if single defindex multiple series crate don't match, does not exist
                 return False
