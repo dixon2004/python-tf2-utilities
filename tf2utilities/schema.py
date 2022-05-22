@@ -655,7 +655,6 @@ class Schema:
                 schemaItem = self.getItemByItemName(name)
                 if not schemaItem: return item
                 item["target"] = schemaItem["defindex"]
-                item["quality"] = item["quality"] or schemaItem["item_quality"] # default quality
             if not item.get("quality"): item["quality"] = 6
 
         if item.get("defindex"): return item
