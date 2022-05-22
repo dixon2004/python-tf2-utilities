@@ -332,7 +332,7 @@ class Schema:
             if not schemaItem: 
                 return item
             item["defindex"] = schemaItem["defindex"]
-            item["quality"] = item["quality"] or schemaItem["quality"] # default quality
+            item["quality"] = item["quality"] or schemaItem["item_quality"] # default quality
             return item
 
         wears = {
