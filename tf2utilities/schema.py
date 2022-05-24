@@ -473,13 +473,30 @@ class Schema:
             if effect == "accursed" and "accursed apparition" in name:
                 # Accursed Apparition never be an unusual
                 continue
-            if effect == "hot" and not item.get("wear"):
-                continue
-            if effect == "hot" and "hot " not in name and ("shotgun" in name or "plaid potshotter" in name or "shot to hell" in name):
-                continue
+            if effect == "hot": 
+                # shotgun # shot to hell
+                # plaid potshotter # shot in the dark
+                if not item.get("wear"):
+                    continue
+                elif "hot " not in name and ("shotgun" in name or "shot " in name or "plaid potshotter" in name):
+                    # Shotgun
+                    # Strange Shotgun
+                    # Plaid Potshotter Mk.II Shotgun (Factory New)
+                    # Shot to Hell Sniper Rifle (Factory New)
+                    # Shot in the Dark Sniper Rifle (Factory New)
+                    # Strange Plaid Potshotter Mk.II Shotgun (Factory New)
+                    # Strange Shot to Hell Sniper Rifle (Factory New)
+                    # Strange Shot in the Dark Sniper Rifle (Factory New)
+                    # Strange Cool Shot to Hell Sniper Rifle (Factory New)
+                    # Strange Shot in the Dark Sniper Rifle (Factory New)
+                    continue
+                elif name.startswith("hot "):
+                    pass
+                else:
+                    continue
             if effect == "cool" and not item.get("wear"):
                 continue
-            if effect in name and "shot in the dark" not in name:
+            if effect in name:
                 name = name.replace(effect, "", 1).strip()
                 item["effect"] = effects[effect]
                 if  item["effect"] == 4:
