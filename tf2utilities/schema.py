@@ -676,7 +676,7 @@ class Schema:
 
         if item.get("defindex"): return item
 
-        if item.get("paintkit") and "war paint" in name:
+        if isinstance(item.get("paintkit"), int) and "war paint" in name:
             name = f"Paintkit {item['paintkit']}"
             if not item.get("quality"): item["quality"] = 15
             items = schema["items"]
