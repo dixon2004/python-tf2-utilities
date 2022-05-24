@@ -1195,7 +1195,7 @@ class Schema:
             (item["quality"]  == 5 and not item.get("effect")) or
             (item["quality"] == 6 and item.get("quality2")) or
             schemaItem["item_quality"] == 5):
-            # If the quality is Unique (and not Elevated quality) or not Unique, Decorated, or Unusual, or if the quality is Unusual but it does not have an effect, or if the item can only be unusual, then add the quality
+            # If the quality is Unique (and is Elevated quality) or not Unique, Decorated, or Unusual, or if the quality is Unusual but it does not have an effect, or if the item can only be unusual, then add the quality
             name += self.getQualityById(item["quality"]) + " "
 
         if item.get("effect"): name += self.getEffectById(item["effect"]) + " "
@@ -1210,7 +1210,7 @@ class Schema:
 
         if item.get("output"): name += self.getItemByDefindex(item["output"])["item_name"] + " "
 
-        if item.get("australium") is True: name += "Australium"
+        if item.get("australium") is True: name += "Australium "
 
         if item.get("paintkit") and type(item["paintkit"]) == int: name += self.getSkinById(item["paintkit"]) + " "
 
