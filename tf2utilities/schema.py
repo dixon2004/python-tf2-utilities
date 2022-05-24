@@ -1194,7 +1194,7 @@ class Schema:
 
 
     # Gets the name of an item with specific attributes
-    def getName(self, item, proper=True):
+    def getName(self, item, proper=True, usePipeForSkin=False):
         schemaItem = self.getItemByDefindex(item["defindex"])
         if schemaItem is None: return None
 
@@ -1229,7 +1229,7 @@ class Schema:
 
         if item.get("australium") is True: name += "Australium "
 
-        if item.get("paintkit") and type(item["paintkit"]) == int: name += self.getSkinById(item["paintkit"]) + " "
+        if item.get("paintkit") and type(item["paintkit"]) == int: name += self.getSkinById(item["paintkit"]) + (" " if usePipeForSkin is False else " | ")
 
         if proper is True and name == "" and schemaItem["proper_name"] is True: name = "The "
 
