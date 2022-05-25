@@ -51,6 +51,9 @@ itemObject = SKU.fromString(sku)
 
 # Convert item object to SKU
 sku = SKU.fromObject(itemObject)
+
+# Convert item data from Steam Web API to SKU
+sku = SKU.fromAPI(itemData)
 ```
 
 ## Questions/Bugs?
