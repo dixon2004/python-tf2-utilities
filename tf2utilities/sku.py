@@ -120,3 +120,51 @@ class SKU:
         if item.get("paint"): sku += f";p{item['paint']}"
         
         return sku
+
+    
+    @staticmethod
+    def fromAPI(item):
+        TEMPLATE = {
+            "defindex": 0,
+            "quality": 0,
+            "craftable": True,
+            "tradable": True,
+            "killstreak": 0,
+            "australium": False,
+            "effect": None,
+            "festive": False,
+            "paintkit": None,
+            "wear": None,
+            "quality2": None,
+            "craftnumber": None,
+            "crateseries": None,
+            "target": None,
+            "output": None,
+            "outputQuality": None,
+            "paint": None
+        }
+
+        TEMPLATE["defindex"] = item["defindex"]
+        TEMPLATE["quality"] = item["quality"]
+        if item.get("flag_cannot_craft"): TEMPLATE["craftable"] = False
+        if item.get("flag_cannot_trade"): TEMPLATE["tradable"] = False
+        if item.get("attributes"):
+            for attribute in item["attributes"]:
+                if attribute["defindex"] == 2025: TEMPLATE["killstreak"] = attribute["float_value"]
+                if attribute["defindex"] == 2027: TEMPLATE["australium"] = True if attribute['float_value'] == 1 else False
+                if attribute["defindex"] == 134: TEMPLATE["effect"] = attribute['float_value']
+                if attribute["defindex"] == 2053: TEMPLATE["festive"] = True if attribute['float_value'] == 1 else False 
+                if attribute["defindex"] == 834: TEMPLATE["paintkit"] = attribute["float_value"]
+                if attribute["defindex"] == 749: TEMPLATE["wear"] = attribute["float_value"]
+                if attribute['defindex'] == 214 and item['quality'] == 5: TEMPLATE["quality2"] = attribute["value"]
+                if attribute["defindex"] == 229: TEMPLATE["craftnumber"] = attribute["value"]
+                if attribute["defindex"] == 187: TEMPLATE["crateseries"] = attribute["float_value"]
+                if 2000 < attribute['defindex'] <= 2009 and attribute.get("attributes"):
+                    for attr in attribute["attributes"]:
+                        if attr["defindex"] == 2012: TEMPLATE["target"] = attr["float_value"]
+                if attribute.get("is_output") and attribute["is_output"] is True: 
+                    TEMPLATE["output"] = attribute["itemdef"]
+                    TEMPLATE["outputQuality"] = attribute["quantity"]
+                if attribute["defindex"] == 142: TEMPLATE["paint"] = attribute["float_value"]
+        
+        return SKU.fromObject(TEMPLATE)
