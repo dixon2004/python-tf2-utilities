@@ -292,6 +292,9 @@ class Schema:
         self.crateSeriesList = self.getCrateSeriesList()
         self.munitionCratesList = self.getMunitionCratesList()
         self.getWeaponSkinsList = self.getWeaponSkinsList()
+        self.qualities = self.getQualities()
+        self.effects = self.getParticleEffects()
+        self.paintkits = self.getPaintKitsList()
 
 
     def getItemByNameWithThe(self, name):
@@ -414,13 +417,11 @@ class Schema:
 
         # Get all qualities
         schema = self.raw["schema"]
-        qualities = {}
-        for qualityType in schema["qualities"]:
-            qualities.update({str(schema["qualityNames"][qualityType].lower()): int(schema["qualities"][qualityType])})
         if not any(ex in qualitySearch for ex in exception):
             # Make sure qualitySearch does not includes in the exception list
             # example: "Haunted Ghosts Vintage Tyrolean" - will skip this
-            for quality in qualities:
+            for qualityC in self.qualities:
+                quality = qualityC.lower()
                 if quality == "collector's" and "collector's" in qualitySearch and 'chemistry set' in qualitySearch:
                     # Skip setting quality if item is Collector's Chemistrt Set
                     continue
@@ -430,32 +431,14 @@ class Schema:
                 if qualitySearch.startswith(quality):
                     name = name.replace(quality, "").strip()
                     item["quality2"] = item["quality"]
-                    item["quality"] = qualities[quality]
+                    item["quality"] = self.qualities[qualityC]
                     break
 
         # Check for effects
-        previous = ""
-        effects = {}
-        for particle in schema["attribute_controlled_attached_particles"]:
-            particleName = particle["name"].lower()
-            if particleName != previous:
-                effects.update({str(particleName): int(particle["id"])})
-                if particleName == "eerie orbiting fire":
-                    del effects["orbiting fire"]
-                    effects.update({"orbiting fire": 33})
-
-                if particleName == "nether trail":
-                    del effects["ether trail"]
-                    effects.update({"ether trail": 103})
-
-                if particleName == "refragmenting reality":
-                    del effects["fragmenting reality"]
-                    effects.update({"fragmenting reality": 141})
-            previous = particleName  
-
         excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
 
-        for effect in effects:
+        for effectC in self.effects:
+            effect = effectC.lower()
             if effect == "showstopper" and "taunt: " not in name:
                 # if the effect is Showstopper and name does not include "Taunt: " or "Shred Alert", skip it
                 if "shred alert" not in name: continue
@@ -498,7 +481,7 @@ class Schema:
                 continue
             if effect in name:
                 name = name.replace(effect, "", 1).strip()
-                item["effect"] = effects[effect]
+                item["effect"] = self.effects[effectC]
                 if  item["effect"] == 4:
                     if item["quality"] is None:
                         item["quality"] = 5
@@ -509,13 +492,13 @@ class Schema:
                 break
 
         if item.get("wear"):
-            paintkits = {schema["paintkits"][paintkit].lower(): int(paintkit) for paintkit in schema["paintkits"]}
-            for paintkit in paintkits:
+            for paintkitC in self.paintkits:
+                paintkit = paintkitC.lower()
                 if "mk.ii" in name and "mk.ii" not in paintkit:
                     continue
                 if paintkit in name:
                     name = name.replace(paintkit, "").replace("|", "").strip()
-                    item["paintkit"] = paintkits[paintkit]
+                    item["paintkit"] = self.paintkits[paintkitC]
                     if not item.get("effect"):
                         if item.get("quality2") == 11:
                             item["quality"] = 11
@@ -530,51 +513,34 @@ class Schema:
 
             if "war paint" not in name:
                 oldDefindex = item["defindex"]
-                if (int(item["paintkit"]) >= 0 and int(item["paintkit"]) <= 66) or (int(item["paintkit"]) >= 68 and int(item["paintkit"]) <= 75) or (int(item["paintkit"]) >= 77 and int(item["paintkit"]) <= 84) or int(item["paintkit"]) in [86, 67, 85, 76]:
-                    # Special Skins, but still need to filter because not everything is special
-                    # TODO: Investigate whether this also the reason we have two Strange variants for skins?
-                    if 'pistol' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["pistolSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["pistolSkins"][str(item['paintkit'])]
-                    elif 'rocket launcher' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["rocketLauncherSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["rocketLauncherSkins"][str(item['paintkit'])]
-                    elif 'medi gun' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["medicgunSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["medicgunSkins"][str(item['paintkit'])]
-                    elif 'revolver' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["revolverSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["revolverSkins"][str(item['paintkit'])]
-                    elif 'stickybomb launcher' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["stickybombSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["stickybombSkins"][str(item['paintkit'])]
-                    elif 'sniper rifle' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["sniperRifleSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["sniperRifleSkins"][str(item['paintkit'])]
-                    elif 'flame thrower' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["flameThrowerSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["flameThrowerSkins"][str(item['paintkit'])]
-                    elif 'minigun' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["minigunSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["minigunSkins"][str(item['paintkit'])]
-                    elif 'scattergun' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["scattergunSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["scattergunSkins"][str(item['paintkit'])]
-                    elif 'shotgun' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["shotgunSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["shotgunSkins"][str(item['paintkit'])]
-                    elif 'smg' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["smgSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["smgSkins"][str(item['paintkit'])]
-                    elif 'grenade launcher' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["grenadeLauncherSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["grenadeLauncherSkins"][str(item['paintkit'])]
-                    elif 'wrench' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["wrenchSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["wrenchSkins"][str(item['paintkit'])]
-                    elif 'knife' in name:
-                        if str(item['paintkit']) in self.getWeaponSkinsList["knifeSkins"]:
-                            item['defindex'] = self.getWeaponSkinsList["knifeSkins"][str(item['paintkit'])]
+                if 'pistol' in name and str(item['paintkit']) in self.getWeaponSkinsList["pistolSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["pistolSkins"][str(item['paintkit'])]
+                elif 'rocket launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["rocketLauncherSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["rocketLauncherSkins"][str(item['paintkit'])]
+                elif 'medi gun' in name and str(item['paintkit']) in self.getWeaponSkinsList["medicgunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["medicgunSkins"][str(item['paintkit'])]
+                elif 'revolver' in name and str(item['paintkit']) in self.getWeaponSkinsList["revolverSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["revolverSkins"][str(item['paintkit'])]
+                elif 'stickybomb launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["stickybombSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["stickybombSkins"][str(item['paintkit'])]
+                elif 'sniper rifle' in name and str(item['paintkit']) in self.getWeaponSkinsList["sniperRifleSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["sniperRifleSkins"][str(item['paintkit'])]
+                elif 'flame thrower' in name and str(item['paintkit']) in self.getWeaponSkinsList["flameThrowerSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["flameThrowerSkins"][str(item['paintkit'])]
+                elif 'minigun' in name and str(item['paintkit']) in self.getWeaponSkinsList["minigunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["minigunSkins"][str(item['paintkit'])]
+                elif 'scattergun' in name and str(item['paintkit']) in self.getWeaponSkinsList["scattergunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["scattergunSkins"][str(item['paintkit'])]
+                elif 'shotgun' in name and str(item['paintkit']) in self.getWeaponSkinsList["shotgunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["shotgunSkins"][str(item['paintkit'])]
+                elif 'smg' in name and str(item['paintkit']) in self.getWeaponSkinsList["smgSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["smgSkins"][str(item['paintkit'])]
+                elif 'grenade launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["grenadeLauncherSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["grenadeLauncherSkins"][str(item['paintkit'])]
+                elif 'wrench' in name and str(item['paintkit']) in self.getWeaponSkinsList["wrenchSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["wrenchSkins"][str(item['paintkit'])]
+                elif 'knife' in name and str(item['paintkit']) in self.getWeaponSkinsList["knifeSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["knifeSkins"][str(item['paintkit'])]
                 if oldDefindex != item["defindex"]: return item
 
         if "(paint: " in name:
@@ -1111,8 +1077,43 @@ class Schema:
         return crateseries
 
     
-    def updateCrateSeriesList(self):
+    def updateCrateSeriesList(self):    
         self.crateSeriesList = self.getCrateSeriesList
+
+
+    def getQualities(self):
+        schema = self.raw["schema"]
+        qualities = {}
+        for qualityType in schema["qualities"]:
+            qualities.update({str(schema["qualityNames"][qualityType]): int(schema["qualities"][qualityType])})
+        return qualities
+
+
+    def getParticleEffects(self):
+        previous = ""
+        effects = {}
+        for particle in self.raw["schema"]["attribute_controlled_attached_particles"]:
+            particleName = particle["name"]
+            if particleName != previous:
+                effects.update({str(particleName): int(particle["id"])})
+                if particleName == "Eerie Orbiting Fire":
+                    del effects["Orbiting Fire"]
+                    effects.update({"Orbiting Fire": 33})
+
+                if particleName == "Nether Trail":
+                    del effects["Ether Trail"]
+                    effects.update({"Ether Trail": 103})
+
+                if particleName == "Refragmenting Reality":
+                    del effects["Fragmenting Reality"]
+                    effects.update({"Fragmenting Reality": 141})
+            previous = particleName  
+        return effects
+
+
+    def getPaintKitsList(self):
+        schema = self.raw["schema"]
+        return {schema["paintkits"][paintkit]: int(paintkit) for paintkit in schema["paintkits"]}
 
 
     def checkExistence(self, item):
