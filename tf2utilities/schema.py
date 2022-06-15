@@ -295,6 +295,7 @@ class Schema:
         self.qualities = self.getQualities()
         self.effects = self.getParticleEffects()
         self.paintkits = self.getPaintKitsList()
+        self.paints = self.getPaints()
 
 
     def getItemByNameWithThe(self, name):
@@ -545,42 +546,11 @@ class Schema:
 
         if "(paint: " in name:
             name = name.replace("(paint: ", "").replace(")", "").strip()
-            paints = {
-                'indubitably green': 7511618,
-                "zepheniah's greed": 4345659,
-                "noble hatter's violet": 5322826,
-                'color no. 216-190-216': 14204632,
-                'a deep commitment to purple': 8208497,
-                'mann co. orange': 13595446,
-                'muskelmannbraun': 10843461,
-                'peculiarly drab tincture': 12955537,
-                'radigan conagher brown': 6901050,
-                'ye olde rustic colour': 8154199,
-                'australium gold': 15185211,
-                'aged moustache grey': 8289918,
-                'an extraordinary abundance of tinge': 15132390,
-                'a distinctive lack of hue': 1315860,
-                'team spirit': 12073019,
-                'pink as hell': 16738740,
-                'a color similar to slate': 3100495,
-                'drably olive': 8421376,
-                'the bitter taste of defeat and lime': 3329330,
-                "the color of a gentlemann's business pants": 15787660,
-                'dark salmon injustice': 15308410,
-                "operator's overalls": 4732984,
-                'waterlogged lab coat': 11049612,
-                'balaclavas are forever': 3874595,
-                'an air of debonair': 6637376,
-                'the value of teamwork': 8400928,
-                'cream spirit': 12807213,
-                "a mann's mint": 12377523,
-                'after eight': 2960676,
-                'legacy paint': 5801378
-            }
-            for paint in paints:
+            for paintC in self.paints:
+                paint = paintC.lower()
                 if paint in name:
                     name = name.replace(paint, "").strip()
-                    item["paint"] = paints[paint]
+                    item["paint"] = self.paints[paintC]
                     break
 
         if "kit fabricator" in name and item["killstreak"] > 1:
@@ -920,9 +890,9 @@ class Schema:
         for paintCan in paintCans:
             if paintCan["attributes"] is None: continue
 
-            toObject[paintCan["item_name"]] = f"p{paintCan['attributes'][0]['value']}"
+            toObject[paintCan["item_name"]] = int(paintCan['attributes'][0]['value'])
 
-        toObject["Legacy Paint"] = "p5801378"
+        toObject["Legacy Paint"] = "5801378"
 
         return toObject
 
