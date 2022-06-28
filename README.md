@@ -11,15 +11,18 @@ pip install tf2-utilities
 ```py
 from tf2utilities.main import TF2
 
-x = TF2("apiKey", autoUpdate, updateTime)
+tf2 = TF2("apiKey", autoUpdate, updateTime).schema
 # autoUpdate - Automatic update schema (True/False). (Default: False)
 # updateTime - Seconds between updates. (Default: 86400 seconds)
 
 # Convert SKU to name
-name = x.schema.getNameFromSku(sku)
+name = tf2.getNameFromSku(sku)
 
 # Convert name to SKU
-sku = x.schema.getSkuFromName(name)
+sku = tf2.getSkuFromName(name)
+
+# Get TF2 schema as json
+schema = tf2.toJSON()
 ```
 
 ```py
