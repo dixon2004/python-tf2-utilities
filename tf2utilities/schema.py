@@ -353,11 +353,15 @@ class Schema:
                 item["wear"] = wears[wear]
                 break
 
+        # So far we only have "Strange" as elevated quality, so ignore other qualities.
+        isExplicitElevatedStrange = False
+        if "strange(e)" in name:
+            item["quality2"] = 11
+            isExplicitElevatedStrange = True
+            name = name.replace("strange(e)", "").strip()
+
         if "strange" in name:
-            if item.get("wear"):
-                item["quality2"] = 11
-            else:
-                item["quality"] = 11
+            item["quality"] = 11
             name = name.replace("strange", "").strip()
 
         name = name.replace("uncraftable", "non-craftable")
@@ -431,7 +435,7 @@ class Schema:
                     continue
                 if qualitySearch.startswith(quality):
                     name = name.replace(quality, "").strip()
-                    item["quality2"] = item["quality"]
+                    item["quality2"] = item["quality2"] or item["quality"]
                     item["quality"] = self.qualities[qualityC]
                     break
 
@@ -500,16 +504,17 @@ class Schema:
                 if paintkit in name:
                     name = name.replace(paintkit, "").replace("|", "").strip()
                     item["paintkit"] = self.paintkits[paintkitC]
-                    if not item.get("effect"):
-                        if item.get("quality2") == 11:
-                            item["quality"] = 11
-                            item["quality2"] = None
-                        else:
-                            item["quality"] = 15
-                    else:
-                        if item.get("quality2") == 11:
-                            item["quality"] == 11
-                            item["quality2"] = None
+                    if item.get("effect") is not None:
+                        if item.get("quality") == 5 and item.get("quality2") == 11:
+                            if not isExplicitElevatedStrange:
+                                item["quality"] = 11
+                                item["quality2"] = None
+                            else:
+                                item["quality"] = 15
+                        elif item.get("quality") == 5 and item.get("quality5") is None:
+                            item["quality"] == 15
+                    if not item.get("quality"):
+                        item["quality"] = 15
                     break
 
             if "war paint" not in name:
@@ -1177,7 +1182,7 @@ class Schema:
 
         if item.get("quality2"):
             # Elevated quality
-            name += self.getQualityById(item["quality2"]) + " "
+            name += self.getQualityById(item["quality2"]) + ("(e)" if item["wear"] is not None or item["paintkit"] is not None else "") + " "
 
         if ((item["quality"] != 6 and item["quality"] != 15 and item["quality"]  != 5) or
             (item["quality"]  == 5 and not item.get("effect")) or
