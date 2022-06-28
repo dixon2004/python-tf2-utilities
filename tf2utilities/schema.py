@@ -1369,6 +1369,11 @@ class Schema:
             raise Exception("Failed to get items game.")
 
 
+    # Creates data object used for initializing class
+    def toJSON(self):
+        return {"time": time.time(), "raw": self.raw}
+
+
 # Recursive function that requests all schema items
 def getAllSchemaItems(apiKey):
     input = {
