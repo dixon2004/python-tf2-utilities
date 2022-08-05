@@ -1172,19 +1172,19 @@ class Schema:
 
 
     # Gets the name of an item with specific attributes
-    def getName(self, item, proper=True, usePipeForSkin=False):
+    def getName(self, item, proper=True, usePipeForSkin=False, scmFormat=False):
         schemaItem = self.getItemByDefindex(item["defindex"])
         if schemaItem is None: return None
 
         name = ""
 
-        if item.get("tradable") is False: name = "Non-Tradable "
+        if not scmFormat and item.get("tradable") is False: name = "Non-Tradable "
 
-        if item.get("craftable") is False: name += "Non-Craftable "
+        if not scmFormat and item.get("craftable") is False: name += "Non-Craftable "
 
         if item.get("quality2"):
             # Elevated quality
-            name += self.getQualityById(item["quality2"]) + ("(e)" if item["wear"] is not None or item["paintkit"] is not None else "") + " "
+            name += self.getQualityById(item["quality2"]) + ("(e)" if not scmFormat and (item["wear"] is not None or item["paintkit"] is not None) else "") + " "
 
         if ((item["quality"] != 6 and item["quality"] != 15 and item["quality"]  != 5) or
             (item["quality"]  == 5 and not item.get("effect")) or
@@ -1193,7 +1193,7 @@ class Schema:
             # If the quality is Unique (and is Elevated quality) or not Unique, Decorated, or Unusual, or if the quality is Unusual but it does not have an effect, or if the item can only be unusual, then add the quality
             name += self.getQualityById(item["quality"]) + " "
 
-        if item.get("effect"): name += self.getEffectById(item["effect"]) + " "
+        if not scmFormat and item.get("effect"): name += self.getEffectById(item["effect"]) + " "
 
         if item.get("festive") is True: name += "Festivized "
 
@@ -1220,11 +1220,21 @@ class Schema:
 
         if item.get("wear"): name += ' (' + ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle Scarred'][item["wear"] - 1] + ')'
 
-        if item.get("crateseries"): name += " #" + str(item["crateseries"])
-        
-        if item.get("craftnumber"): name += ' #' + str(item["craftnumber"])
+        if item.get("crateseries"):
+            if "attributes" in schemaItem and schemaItem["attributes"][0]["class"] == "supply_crate_series":
+                hasAttr = True
+            else:
+                hasAttr = False
+            if scmFormat:
+                if hasAttr:
+                    name += " Series %23" + str(item["crateseries"])
+                # Else we don't need to add #number
+            else:
+                name += " #" + str(item["crateseries"])
+        elif item.get("craftnumber"):
+            name += ' #' + str(item["craftnumber"])
 
-        if item.get("paint"): name += f" (Paint: {self.getPaintNameByDecimal(item['paint'])})"
+        if not scmFormat and item.get("paint"): name += f" (Paint: {self.getPaintNameByDecimal(item['paint'])})"
 
         return name
 
