@@ -1057,10 +1057,6 @@ class Schema:
         items = None
         return crateseries
 
-    
-    def updateCrateSeriesList(self):    
-        self.crateSeriesList = self.getCrateSeriesList
-
 
     def getQualities(self):
         schema = self.raw["schema"]
