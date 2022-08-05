@@ -678,7 +678,7 @@ class Schema:
                     item["defindex"] = exclusiveGenuine[item['defindex']]
 
             if schemaItem["item_class"] == "supply_crate":
-                item["crateseries"] = self.getCrateSeriesList()[str(item["defindex"])]
+                item["crateseries"] = self.crateSeriesList[str(item["defindex"])]
             
             elif schemaItem["item_class"] != "supply_crate" and number is not None:
                 item["craftnumber"] = number
