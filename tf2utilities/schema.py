@@ -444,6 +444,10 @@ class Schema:
 
         for effectC in self.effects:
             effect = effectC.lower()
+            if effect == "stardust" and "starduster" in name:
+                sub = name.replace("stardust", "").strip()
+                if "starduster" not in sub:
+                    continue
             if effect == "showstopper" and "taunt: " not in name:
                 # if the effect is Showstopper and name does not include "Taunt: " or "Shred Alert", skip it
                 if "shred alert" not in name: continue
