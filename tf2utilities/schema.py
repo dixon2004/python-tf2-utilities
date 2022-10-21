@@ -505,6 +505,8 @@ class Schema:
                 paintkit = paintkitC.lower()
                 if "mk.ii" in name and "mk.ii" not in paintkit:
                     continue
+                if "(green)" in name and "(green)" not in paintkit:
+                    continue
                 if paintkit in name:
                     name = name.replace(paintkit, "").replace("|", "").strip()
                     item["paintkit"] = self.paintkits[paintkitC]
