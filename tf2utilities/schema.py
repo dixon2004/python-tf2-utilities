@@ -507,6 +507,8 @@ class Schema:
                     continue
                 if "(green)" in name and "(green)" not in paintkit:
                     continue
+                if "chilly" in name and 'chilly' not in paintkit:
+                    continue
                 if paintkit in name:
                     name = name.replace(paintkit, "").replace("|", "").strip()
                     item["paintkit"] = self.paintkits[paintkitC]
