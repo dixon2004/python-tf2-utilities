@@ -411,7 +411,8 @@ class Schema:
             'haunted hat',
             'unusual cap',
             'vintage tyrolean',
-            'vintage merryweather'
+            'vintage merryweather',
+            'haunted kraken'
         ]
 
         qualitySearch = name
@@ -464,6 +465,9 @@ class Schema:
                 continue
             if effect == "accursed" and "accursed apparition" in name:
                 # Accursed Apparition never be an unusual
+                continue
+            if effect == "haunted" and "haunted kraken" in name:
+                # Skip Haunted effect if name include Haunted Kraken
                 continue
             if effect == "hot": 
                 # shotgun # shot to hell
