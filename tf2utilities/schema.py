@@ -398,7 +398,7 @@ class Schema:
             name = name.replace("australium", "").strip()
             item["australium"] = True
         
-        if "festivized" in name:
+        if "festivized" in name and "festivized formation" not in name:
             name = name.replace("festivized", "").strip()
             item["festive"] = True
 
