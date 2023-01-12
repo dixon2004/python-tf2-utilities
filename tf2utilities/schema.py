@@ -982,9 +982,6 @@ class Schema:
 
     # Get an array of item objects for craftable weapons
     def getCraftableWeaponsSchema(self):
-        # Includes Jungle Inferno update weapons
-        weaponsToInclude = {1178, 1179, 1180, 1181, 1190}
-
         weaponsToExclude = {
             # Exclude these weapons
             266, # Horseless Headless Horsemann's Headtaker
@@ -1010,10 +1007,7 @@ class Schema:
 
         craftableWeapons = []
         for item in self.raw["schema"]["items"]:
-            if (
-                item["defindex"] in weaponsToInclude or
-                (item["defindex"] not in weaponsToExclude and item["item_quality"] == 6 and item.get("craft_class") == "weapon")
-                ): 
+            if item["defindex"] not in weaponsToExclude and item["item_quality"] == 6 and item.get("craft_class") == "weapon": 
                 craftableWeapons.append(item)
 
         return craftableWeapons
