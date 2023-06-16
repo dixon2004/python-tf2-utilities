@@ -676,7 +676,7 @@ class Schema:
                 for retiredKey in retiredKeys:
                     if retiredKey['name'].lower() == name:
                         item["defindex"] = retiredKey["defindex"]
-                        item["quality"] = item.get["quality"] or 6
+                        item["quality"] = item.get("quality") or 6
                         return item
 
             schemaItem = self.getItemByNameWithThe(name)
