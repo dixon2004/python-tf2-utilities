@@ -412,7 +412,8 @@ class Schema:
             'unusual cap',
             'vintage tyrolean',
             'vintage merryweather',
-            'haunted kraken'
+            'haunted kraken',
+            'haunted forever!'
         ]
 
         qualitySearch = name
