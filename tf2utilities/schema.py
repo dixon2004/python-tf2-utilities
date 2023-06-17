@@ -531,37 +531,36 @@ class Schema:
                         item["quality"] = 15
                     break
 
-            if "war paint" not in name:
+            if "war paint" not in name and "paintkit" in item:
                 oldDefindex = item["defindex"]
-                if "paintkit" in item:
-                    if 'pistol' in name and str(item['paintkit']) in self.getWeaponSkinsList["pistolSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["pistolSkins"][str(item['paintkit'])]
-                    elif 'rocket launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["rocketLauncherSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["rocketLauncherSkins"][str(item['paintkit'])]
-                    elif 'medi gun' in name and str(item['paintkit']) in self.getWeaponSkinsList["medicgunSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["medicgunSkins"][str(item['paintkit'])]
-                    elif 'revolver' in name and str(item['paintkit']) in self.getWeaponSkinsList["revolverSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["revolverSkins"][str(item['paintkit'])]
-                    elif 'stickybomb launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["stickybombSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["stickybombSkins"][str(item['paintkit'])]
-                    elif 'sniper rifle' in name and str(item['paintkit']) in self.getWeaponSkinsList["sniperRifleSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["sniperRifleSkins"][str(item['paintkit'])]
-                    elif 'flame thrower' in name and str(item['paintkit']) in self.getWeaponSkinsList["flameThrowerSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["flameThrowerSkins"][str(item['paintkit'])]
-                    elif 'minigun' in name and str(item['paintkit']) in self.getWeaponSkinsList["minigunSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["minigunSkins"][str(item['paintkit'])]
-                    elif 'scattergun' in name and str(item['paintkit']) in self.getWeaponSkinsList["scattergunSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["scattergunSkins"][str(item['paintkit'])]
-                    elif 'shotgun' in name and str(item['paintkit']) in self.getWeaponSkinsList["shotgunSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["shotgunSkins"][str(item['paintkit'])]
-                    elif 'smg' in name and str(item['paintkit']) in self.getWeaponSkinsList["smgSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["smgSkins"][str(item['paintkit'])]
-                    elif 'grenade launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["grenadeLauncherSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["grenadeLauncherSkins"][str(item['paintkit'])]
-                    elif 'wrench' in name and str(item['paintkit']) in self.getWeaponSkinsList["wrenchSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["wrenchSkins"][str(item['paintkit'])]
-                    elif 'knife' in name and str(item['paintkit']) in self.getWeaponSkinsList["knifeSkins"]:
-                        item['defindex'] = self.getWeaponSkinsList["knifeSkins"][str(item['paintkit'])]
+                if 'pistol' in name and str(item['paintkit']) in self.getWeaponSkinsList["pistolSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["pistolSkins"][str(item['paintkit'])]
+                elif 'rocket launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["rocketLauncherSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["rocketLauncherSkins"][str(item['paintkit'])]
+                elif 'medi gun' in name and str(item['paintkit']) in self.getWeaponSkinsList["medicgunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["medicgunSkins"][str(item['paintkit'])]
+                elif 'revolver' in name and str(item['paintkit']) in self.getWeaponSkinsList["revolverSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["revolverSkins"][str(item['paintkit'])]
+                elif 'stickybomb launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["stickybombSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["stickybombSkins"][str(item['paintkit'])]
+                elif 'sniper rifle' in name and str(item['paintkit']) in self.getWeaponSkinsList["sniperRifleSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["sniperRifleSkins"][str(item['paintkit'])]
+                elif 'flame thrower' in name and str(item['paintkit']) in self.getWeaponSkinsList["flameThrowerSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["flameThrowerSkins"][str(item['paintkit'])]
+                elif 'minigun' in name and str(item['paintkit']) in self.getWeaponSkinsList["minigunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["minigunSkins"][str(item['paintkit'])]
+                elif 'scattergun' in name and str(item['paintkit']) in self.getWeaponSkinsList["scattergunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["scattergunSkins"][str(item['paintkit'])]
+                elif 'shotgun' in name and str(item['paintkit']) in self.getWeaponSkinsList["shotgunSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["shotgunSkins"][str(item['paintkit'])]
+                elif 'smg' in name and str(item['paintkit']) in self.getWeaponSkinsList["smgSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["smgSkins"][str(item['paintkit'])]
+                elif 'grenade launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["grenadeLauncherSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["grenadeLauncherSkins"][str(item['paintkit'])]
+                elif 'wrench' in name and str(item['paintkit']) in self.getWeaponSkinsList["wrenchSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["wrenchSkins"][str(item['paintkit'])]
+                elif 'knife' in name and str(item['paintkit']) in self.getWeaponSkinsList["knifeSkins"]:
+                    item['defindex'] = self.getWeaponSkinsList["knifeSkins"][str(item['paintkit'])]
                 if oldDefindex != item["defindex"]: return item
 
         if "(paint: " in name:
