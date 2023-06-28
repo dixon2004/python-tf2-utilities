@@ -413,8 +413,7 @@ class Schema:
             'vintage tyrolean',
             'vintage merryweather',
             'haunted kraken',
-            'haunted forever!',
-            'frostbite bonnet'
+            'haunted forever!'
         ]
 
         qualitySearch = name
@@ -471,6 +470,10 @@ class Schema:
             if effect == "haunted" and "haunted kraken" in name:
                 # Skip Haunted effect if name include Haunted Kraken
                 continue
+            if effect == "frostbite" and "frostbite bonnet" in name:
+                # Skip Frostbite effect if name include Faunted Braken
+                continue
+
             if effect == "hot": 
                 # shotgun # shot to hell
                 # plaid potshotter # shot in the dark
