@@ -650,6 +650,12 @@ class Schema:
                 item["defindex"] = 5068
                 item["quality"] = 6
                 return item
+            
+            elif "select reserve mann co. supply crate #" in name:
+                item["defindex"] = 5660
+                item["crateseries"] = 60
+                item["quality"] = 6
+                return item
 
             elif "mann co. supply crate #" in name:
                 crateseries = int(name[23:])
