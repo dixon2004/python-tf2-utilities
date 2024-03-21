@@ -482,7 +482,8 @@ class Schema:
             'vintage tyrolean',
             'vintage merryweather',
             'haunted kraken',
-            'haunted forever!'
+            'haunted forever!',
+            'haunted cremation'
         ]
 
         qualitySearch = name
