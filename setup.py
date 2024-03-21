@@ -10,7 +10,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name="tf2-utilities",
-    version="2.1.1",
+    version="2.2.0",
     description="Get information about TF2 items, effects, skins and more",
     long_description=long_description,
     long_description_content_type="text/markdown",
