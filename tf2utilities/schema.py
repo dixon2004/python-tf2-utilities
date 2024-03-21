@@ -263,6 +263,75 @@ exclusiveGenuineReversed = {
 }
 
 
+strangifierChemistrySetSeries = {
+    "647": 1,  # All-Father
+    "828": 1,  # Archimedes
+    "776": 1,  # Bird-Man of Aberdeen
+    "451": 1,  # Bonk Boy
+    "103": 1,  # Camera Beard
+    "446": 1,  # Fancy Dress Uniform
+    "541": 1,  # Merc's Pride Scarf
+    "733": 1,  # RoBro 3000
+    "387": 1,  # Sight for Sore Eyes
+    "486": 1,  # Summer Shades
+    "386": 1,  # Teddy Roosebelt
+    "757": 1,  # Toss-Proof Towel
+    "393": 1,  # Villain's Veil
+    "30132": 2,  # Blood Banker
+    "707": 2,  # Boston Boom-Bringer
+    "30073": 2,  # Dark Age Defender
+    "878": 2,  # Foppish Physician
+    "440": 2,  # Lord Cockswain's Novelty Mutton Chops and Pipe
+    "645": 2,  # Outback Intellectual
+    "343": 2,  # Professor Speks
+    "643": 2,  # Sandvich Safe
+    "336": 2,  # Stockbroker's Scarf
+    "30377": 3,  # Antarctic Researcher
+    "30371": 3,  # Archer's Groundings
+    "30353": 3,  # Backstabber's Boomslang
+    "30344": 3,  # Bullet Buzz
+    "30348": 3,  # Bushi-Dou
+    "30361": 3,  # Colonel's Coat
+    "30372": 3,  # Combat Slacks
+    "30367": 3,  # Cute Suit
+    "30357": 3,  # Dark Falkirk Helm
+    "30375": 3,  # Deep Cover Operator
+    "30350": 3,  # Dough Puncher
+    "30341": 3,  # Ein
+    "30369": 3,  # Eliminator's Safeguard
+    "30349": 3,  # Fashionable Megalomaniac
+    "30379": 3,  # Gaiter Guards
+    "30343": 3,  # Gone Commando
+    "30338": 3,  # Ground Control
+    "30356": 3,  # Heat of Winter
+    "30342": 3,  # Heavy Lifter
+    "30378": 3,  # Heer's Helmet
+    "30359": 3,  # Huntsman's Essentials
+    "30363": 3,  # Juggernaut Jacket
+    "30339": 3,  # Killer's Kit
+    "30362": 3,  # Law
+    "30345": 3,  # Leftover Trap
+    "30352": 3,  # Mustachioed Mann
+    "30360": 3,  # Napoleon Complex
+    "30354": 3,  # Rat Stompers
+    "30374": 3,  # Sammy Cap
+    "30366": 3,  # Sangu Sleeves
+    "30347": 3,  # Scotch Saver
+    "30365": 3,  # Smock Surgeon
+    "30355": 3,  # Sole Mate
+    "30358": 3,  # Sole Saviors
+    "30340": 3,  # Stylish DeGroot
+    "30351": 3,  # Teutonic Toque
+    "30376": 3,  # Ticket Boy
+    "30373": 3,  # Toowoomba Tunic
+    "30346": 3,  # Trash Man
+    "30336": 3,  # Trencher's Topper
+    "30337": 3,  # Trencher's Tunic
+    "30368": 3,  # War Goggles
+    "30364": 3,  # Warmth Preserver
+}
+
+
 retiredKeys = [
     { "defindex": 5049, "name": 'Festive Winter Crate Key' },
     { "defindex": 5067, "name": 'Refreshing Summer Cooler Key' },
@@ -1258,6 +1327,10 @@ class Schema:
             name += ' #' + str(item["craftnumber"])
 
         if not scmFormat and item.get("paint"): name += f" (Paint: {self.getPaintNameByDecimal(item['paint'])})"
+
+        if scmFormat and schemaItem["item_name"] == "Chemistry Set" and item.get("output") == 6522:
+            if item.get("target") and strangifierChemistrySetSeries.get(str(item["target"])):
+                name += f" Series %23{strangifierChemistrySetSeries.get(str(item['target']))}"
 
         return name
 
