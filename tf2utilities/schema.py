@@ -767,8 +767,8 @@ class Schema:
 
             # Fix defindex for Exclusive Genuine items
             if item["quality"] == 1:
-                if item["defindex"] in exclusiveGenuine:
-                    item["defindex"] = exclusiveGenuine[item['defindex']]
+                if str(item["defindex"]) in exclusiveGenuine:
+                    item["defindex"] = exclusiveGenuine[str(item['defindex'])]
 
             if schemaItem["item_class"] == "supply_crate":
                 item["crateseries"] = self.crateSeriesList.get(str(item["defindex"])) or None
