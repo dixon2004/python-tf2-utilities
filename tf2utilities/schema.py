@@ -1206,8 +1206,14 @@ class Schema:
         if ((item["quality"] != 6 and item["quality"] != 15 and item["quality"]  != 5) or
             (item["quality"]  == 5 and not item.get("effect")) or
             (item["quality"] == 6 and item.get("quality2")) or
+            (item["quality"] == 5 and scmFormat) or 
             schemaItem["item_quality"] == 5):
-            # If the quality is Unique (and is Elevated quality) or not Unique, Decorated, or Unusual, or if the quality is Unusual but it does not have an effect, or if the item can only be unusual, then add the quality
+            # If the quality is Unique (and is Elevated quality) 
+            # or not Unique, Decorated, or Unusual, 
+            # or if the quality is Unusual but it does not have an effect, 
+            # or if the item can only be unusual, 
+            # or if it's unusual and Steam Community Market format,
+            # then add the quality
             name += self.getQualityById(item["quality"]) + " "
 
         if not scmFormat and item.get("effect"): name += self.getEffectById(item["effect"]) + " "
