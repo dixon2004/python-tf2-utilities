@@ -1494,7 +1494,12 @@ def getAllSchemaItems(apiKey):
         "key": apiKey,
         "language": "en"
     }
-    result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
+    while 1:
+        try:
+            result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
+            break
+        except:
+            pass
     items = result["result"]["items"]
     while "next" in result["result"]:
         input = {
@@ -1502,6 +1507,10 @@ def getAllSchemaItems(apiKey):
             "language": "en",
             "start": result["result"]["next"]
         }
-        result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
-        items = items + result["result"]["items"]
+        while 1:
+            try:
+                result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
+                items = items + result["result"]["items"]
+            except:
+                pass
     return items
