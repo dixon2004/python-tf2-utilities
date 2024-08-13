@@ -1333,6 +1333,11 @@ class Schema:
             if item.get("target") and strangifierChemistrySetSeries.get(str(item["target"])):
                 name += f" Series %23{strangifierChemistrySetSeries.get(str(item['target']))}"
 
+        if scmFormat and item.get('wear') is not None and item.get('effect') is not None and item.get('quality') == 15:
+            # Need to add "Unusual" for Unusual Skins for Steam Community Market
+            # for item quality 15
+            name = 'Unusual ' + name
+
         return name
 
 
