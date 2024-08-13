@@ -1172,6 +1172,8 @@ class Schema:
                     del effects["Fragmenting Reality"]
                     effects.update({"Fragmenting Reality": 141})
             previous = particleName  
+        # id 326 has an empty name causing things to break
+        effects.pop('', None)
         return effects
 
 
