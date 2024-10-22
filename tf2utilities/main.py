@@ -77,5 +77,5 @@ class TF2:
                     else:
                         raise Exception("Schema is not a dict.") 
                     break
-            except requests.exceptions.ConnectionError:
+            except:
                 time.sleep(10)
