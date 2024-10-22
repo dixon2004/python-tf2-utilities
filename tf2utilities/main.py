@@ -26,8 +26,8 @@ class TF2:
     # Gets the schema from the TF2 API
     def getSchema(self):
         if self.apiKey is not None:
-            try:
-                while 1:
+            while 1:
+                try:
                     raw = {
                         "schema": Schema.getOverview(self.apiKey) | {"items": Schema.getItems(self.apiKey), "paintkits": Schema.getPaintKits()},
                         "items_game": Schema.getItemsGame()
@@ -77,5 +77,5 @@ class TF2:
                     else:
                         raise Exception("Schema is not a dict.") 
                     break
-            except:
-                time.sleep(10)
+                except:
+                    time.sleep(10)
