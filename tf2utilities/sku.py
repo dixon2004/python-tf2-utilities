@@ -1,7 +1,16 @@
 class SKU:
-    # Convert SKU to item object
+
     @staticmethod
-    def fromString(sku):
+    def from_string(sku: str) -> dict:
+        """
+        Converts a SKU to an item object.
+        
+        Args:
+            sku (str): The SKU to convert.
+            
+        Returns:
+            dict: The item object.
+        """
         TEMPLATE = {
             "defindex": 0,
             "quality": 0,
@@ -24,14 +33,14 @@ class SKU:
         attributes = {}
         
         parts = sku.split(";")
-        partsCount = len(parts)
+        parts_count = len(parts)
 
-        if partsCount > 0:
+        if parts_count > 0:
             if str(parts[0]).isnumeric():
                 attributes["defindex"] = int(parts[0])
             parts.pop(0)
 
-        if partsCount > 0:
+        if parts_count > 0:
             if str(parts[0]).isnumeric():
                 attributes["quality"] = int(parts[0])
             parts.pop(0)
@@ -76,9 +85,17 @@ class SKU:
         return TEMPLATE
 
 
-    # Convert item object to SKU
     @staticmethod
-    def fromObject(item):
+    def from_object(item: dict) -> str:
+        """
+        Converts an item object to a SKU.
+        
+        Args:
+            item (dict): The item object to convert.
+            
+        Returns:
+            str: The SKU.
+        """
         TEMPLATE = {
             "defindex": 0,
             "quality": 0,
@@ -116,14 +133,23 @@ class SKU:
         if item.get("craftnumber"): sku += f";n{item['craftnumber']}"
         if item.get("crateseries"): sku += f";c{item['crateseries']}"
         if item.get("output"): sku += f";od-{item['output']}"
-        if item.get("outputQuality"): sku += f";oq{item['outputQuality']}"
+        if item.get("outputQuality"): sku += f";oq-{item['outputQuality']}"
         if item.get("paint"): sku += f";p{item['paint']}"
         
         return sku
 
     
     @staticmethod
-    def fromAPI(item):
+    def from_API(item: dict) -> dict:
+        """
+        Converts response from the Steam API to an item object.
+        
+        Args:
+            item (dict): The item object from the Steam API to convert.
+        
+        Returns:
+            dict: The item object.
+        """
         TEMPLATE = {
             "defindex": 0,
             "quality": 0,
@@ -167,4 +193,4 @@ class SKU:
                     TEMPLATE["outputQuality"] = attribute["quantity"]
                 if int(attribute["defindex"]) == 142: TEMPLATE["paint"] = attribute["float_value"]
         
-        return SKU.fromObject(TEMPLATE)
+        return SKU.from_object(TEMPLATE)

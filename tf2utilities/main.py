@@ -4,30 +4,50 @@ import time
 
 
 class TF2:
-    def __init__(self, apiKey=None, autoUpdate=False, updateTime=24 * 60 * 60, lite=False):
-        self.apiKey = apiKey
-        self.autoUpdate = autoUpdate
-        self.updateTime = updateTime
+
+    def __init__(
+            self, 
+            api_key: str = None, 
+            auto_update: bool = False, 
+            update_time: int = 24 * 60 * 60, 
+            lite: bool = False
+            ) -> None:
+        """
+        Initializes the TF2 class.
+        
+        Args:
+            api_key (str): The Steam API key.
+            auto_update (bool): Whether to automatically update the schema.
+            update_time (int): The time in seconds to wait before updating the schema.
+            lite (bool): Whether to use the lite version of the schema.
+        """
+        self.api_key = api_key
+        self.auto_update = auto_update
+        self.update_time = update_time
         self.schema = None
         self.lite = lite
-        # Starts schema updater if autopricer is True
-        if self.autoUpdate is True: Thread(target=self.updater, daemon=True).start()
-        if self.schema is None: self.getSchema()
+
+        if self.update_time is True: Thread(target=self.updater, daemon=True).start()
+        if self.schema is None: self.get_schema()
 
 
-    # Schema updater
-    def updater(self):
+    def updater(self) -> None:
+        """
+        Starts the schema updater.
+        """
         while True:
-            self.getSchema()
-            time.sleep(self.updateTime)
+            self.get_schema()
+            time.sleep(self.update_time)
 
 
-    # Gets the schema from the TF2 API
-    def getSchema(self):
-        if self.apiKey is not None:
+    def get_schema(self) -> None:
+        """
+        Gets the schema from the TF2 API.
+        """
+        if self.api_key is not None:
             raw = {
-                "schema": Schema.getOverview(self.apiKey) | {"items": Schema.getItems(self.apiKey), "paintkits": Schema.getPaintKits()},
-                "items_game": Schema.getItemsGame()
+                "schema": Schema.get_overview(self.api_key) | {"items": Schema.get_items(self.api_key), "paintkits": Schema.get_paint_kits()},
+                "items_game": Schema.get_items_game()
             }
 
             if self.lite:

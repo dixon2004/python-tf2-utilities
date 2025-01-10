@@ -1,4 +1,4 @@
-from tf2utilities.webapi import WebRequest
+from tf2utilities.webapi import web_request
 from tf2utilities.sku import SKU
 import requests 
 import time
@@ -7,233 +7,7 @@ import vdf
 import re
 
 
-# munitionCrate = {
-#     "82": 5734,
-#     "83": 5735,
-#     "84": 5742,
-#     "85": 5752,
-#     "90": 5781,
-#     "91": 5802,
-#     "92": 5803,
-#     "103": 5859
-# }
-
-
-# pistolSkins = {
-# 	"0": 15013,
-# 	"18": 15018,
-# 	"35": 15035,
-# 	"41": 15041,
-# 	"46": 15046,
-# 	"56": 15056,
-# 	"61": 15061,
-# 	"63": 15060,
-# 	"69": 15100,
-# 	"70": 15101,
-# 	"74": 15102,
-# 	"78": 15126,
-# 	"81": 15148
-# }
-
-
-# rocketLauncherSkins = {
-# 	"1": 15014,
-# 	"6": 15006,
-# 	"28": 15028,
-# 	"43": 15043,
-# 	"52": 15052,
-# 	"57": 15057,
-# 	"60": 15081,
-# 	"69": 15104,
-# 	"70": 15105,
-# 	"76": 15129,
-# 	"79": 15130,
-# 	"80": 15150
-# }
-
-
-# medicgunSkins = {
-# 	"2": 15010,
-# 	"5": 15008,
-# 	"25": 15025,
-# 	"39": 15039,
-# 	"50": 15050,
-# 	"65": 15078,
-# 	"72": 15097,
-# 	"76": 15120,
-# 	"78": 15121,
-# 	"79": 15122,
-# 	"81": 15145,
-# 	"83": 15146
-# }
-
-
-# revolverSkins = {
-# 	"3": 15011,
-# 	"27": 15027,
-# 	"42": 15042,
-# 	"51": 15051,
-# 	"63": 15064,
-# 	"64": 15062,
-# 	"65": 15063,
-# 	"72": 15103,
-# 	"76": 15127,
-# 	"77": 15128,
-# 	"81": 15149
-# }
-
-
-# stickybombSkins = {
-# 	"4": 15012,
-# 	"8": 15009,
-# 	"24": 15024,
-# 	"38": 15038,
-# 	"45": 15045,
-# 	"48": 15048,
-# 	"60": 15082,
-# 	"62": 15083,
-# 	"63": 15084,
-# 	"68": 15113,
-# 	"76": 15137,
-# 	"78": 15138,
-# 	"81": 15155
-# }
-
-
-# sniperRifleSkins = {
-# 	"7": 15007,
-# 	"14": 15000,
-# 	"19": 15019,
-# 	"23": 15023,
-# 	"33": 15033,
-# 	"59": 15059,
-# 	"62": 15070,
-# 	"64": 15071,
-# 	"65": 15072,
-# 	"76": 15135,
-# 	"66": 15111,
-# 	"67": 15112,
-# 	"78": 15136,
-# 	"82": 15154
-# }
-
-
-# flameThrowerSkins = {
-# 	"9": 15005,
-# 	"17": 15017,
-# 	"30": 15030,
-# 	"34": 15034,
-# 	"49": 15049,
-# 	"54": 15054,
-# 	"60": 15066,
-# 	"61": 15068,
-# 	"62": 15067,
-# 	"66": 15089,
-# 	"67": 15090,
-# 	"76": 15115,
-# 	"80": 15141
-# }
-
-
-# minigunSkins = {
-# 	"10": 15004,
-# 	"20": 15020,
-# 	"26": 15026,
-# 	"31": 15031,
-# 	"40": 15040,
-# 	"55": 15055,
-# 	"61": 15088,
-# 	"62": 15087,
-# 	"63": 15086,
-# 	"70": 15098,
-# 	"73": 15099,
-# 	"76": 15123,
-# 	"77": 15125,
-# 	"78": 15124,
-# 	"84": 15147
-# }
-
-
-# scattergunSkins = {
-# 	"11": 15002,
-# 	"15": 15015,
-# 	"21": 15021,
-# 	"29": 15029,
-# 	"36": 15036,
-# 	"53": 15053,
-# 	"61": 15069,
-# 	"63": 15065,
-# 	"69": 15106,
-# 	"72": 15107,
-# 	"74": 15108,
-# 	"76": 15131,
-# 	"83": 15157,
-# 	"85": 15151
-# }
-
-
-# shotgunSkins = {
-# 	"12": 15003,
-# 	"16": 15016,
-# 	"44": 15044,
-# 	"47": 15047,
-# 	"60": 15085,
-# 	"72": 15109,
-# 	"76": 15132,
-# 	"78": 15133,
-# 	"86": 15152
-# }
-
-
-# smgSkins = {
-# 	"13": 15001,
-# 	"22": 15022,
-# 	"32": 15032,
-# 	"37": 15037,
-# 	"58": 15058,
-# 	"65": 15076,
-# 	"69": 15110,
-# 	"79": 15134,
-# 	"81": 15153
-# }
-
-
-# wrenchSkins = {
-# 	"60": 15074,
-# 	"61": 15073,
-# 	"64": 15075,
-# 	"75": 15114,
-# 	"77": 15140,
-# 	"78": 15139,
-# 	"82": 15156
-# }
-
-
-# grenadeLauncherSkins = {
-# 	"60": 15077,
-# 	"63": 15079,
-# 	"67": 15091,
-# 	"68": 15092,
-# 	"76": 15116,
-# 	"77": 15117,
-# 	"80": 15142,
-# 	"84": 15158
-# }
-
-
-# knifeSkins = {
-# 	"64": 15080,
-# 	"69": 15094,
-# 	"70": 15095,
-# 	"71": 15096,
-# 	"77": 15119,
-# 	"78": 15118,
-# 	"81": 15143,
-# 	"82": 15144
-# }
-
-
-exclusiveGenuine = {
+exclusive_genuine = {
     "810": 831, # Genuine Red-Tape Recorder
     "811": 832, # Genuine Huo-Long Heater
     "812": 833, # Genuine Flying Guillotine
@@ -248,7 +22,7 @@ exclusiveGenuine = {
 }
 
 
-exclusiveGenuineReversed = {
+exclusive_genuine_reversed = {
     "831": 820, # Red-Tape Recorder
     "832": 811, # Huo-Long Heater
     "833": 812, # Flying Guillotine
@@ -263,7 +37,7 @@ exclusiveGenuineReversed = {
 }
 
 
-strangifierChemistrySetSeries = {
+strangifier_chemistry_set_series = {
     "647": 1,  # All-Father
     "828": 1,  # Archimedes
     "776": 1,  # Bird-Man of Aberdeen
@@ -332,7 +106,7 @@ strangifierChemistrySetSeries = {
 }
 
 
-retiredKeys = [
+retired_keys = [
     { "defindex": 5049, "name": 'Festive Winter Crate Key' },
     { "defindex": 5067, "name": 'Refreshing Summer Cooler Key' },
     { "defindex": 5072, "name": 'Naughty Winter Crate Key' },
@@ -351,23 +125,39 @@ retiredKeys = [
 ]
 
 
-retiredKeysNames = [key.get("name").lower() for key in list(retiredKeys)]
+retired_keys_names = [key.get("name").lower() for key in list(retired_keys)]
 
 
 class Schema:
-    def __init__(self, data):
+
+    def __init__(self, data: dict) -> None:
+        """
+        Initializes the Schema class.
+        
+        Args:
+            data (dict): The schema data.
+        """
         self.raw = data["raw"] or None
         self.time = data["time"] or time.time()
-        self.crateSeriesList = self.getCrateSeriesList()
-        self.munitionCratesList = self.getMunitionCratesList()
-        self.getWeaponSkinsList = self.getWeaponSkinsList()
-        self.qualities = self.getQualities()
-        self.effects = self.getParticleEffects()
-        self.paintkits = self.getPaintKitsList()
-        self.paints = self.getPaints()
+        self.crate_series_list = self.get_crate_series_list()
+        self.munition_crates_list = self.get_munition_crates_list()
+        self.weapon_skins_list = self.get_weapon_skins_list()
+        self.qualities = self.get_qualities()
+        self.effects = self.get_particle_effects()
+        self.paintkits = self.get_paint_kits_list()
+        self.paints = self.get_paints()
 
 
-    def getItemByNameWithThe(self, name):
+    def get_item_by_name_with_the(self, name: str) -> dict:
+        """
+        Gets an item by name with "the" in it.
+
+        Args:
+            name (str): The name of the item.
+
+        Returns:
+            dict: The item object.
+        """
         items = self.raw["schema"]["items"]
         
         for item in items:
@@ -385,13 +175,29 @@ class Schema:
         return None
 
 
-    # Gets sku
-    def getSkuFromName(self, name):
-        return SKU.fromObject(self.getItemObjectFromName(name))
+    def get_sku_from_name(self, name: str) -> str:
+        """
+        Gets item's SKU from name.
+        
+        Args:
+            name (str): The name of the item.
+        
+        Returns:
+            str: The SKU of the item.
+        """
+        return SKU.from_object(self.get_item_object_from_name(name))
 
 
-    # Gets sku item object
-    def getItemObjectFromName(self, name):
+    def get_item_object_from_name(self, name: str) -> dict:
+        """
+        Gets an item object from name.
+
+        Args:
+            name (str): The name of the item.
+
+        Returns:
+            dict: The item object.
+        """
         name = name.lower()
         item = {
             "defindex": None,
@@ -401,11 +207,11 @@ class Schema:
 
         parts = ["strange part:", "strange cosmetic part:", "strange filter:", "strange count transfer tool", "strange bacon grease"]
         if any(part in name for part in parts):
-            schemaItem = self.getItemByItemName(name)
-            if not schemaItem: 
+            schema_item = self.get_item_by_item_name(name)
+            if not schema_item: 
                 return item
-            item["defindex"] = schemaItem["defindex"]
-            item["quality"] = item.get("quality") or schemaItem.get("item_quality") # default quality
+            item["defindex"] = schema_item["defindex"]
+            item["quality"] = item.get("quality") or schema_item.get("item_quality") # default quality
             return item
 
         wears = {
@@ -423,10 +229,10 @@ class Schema:
                 break
 
         # So far we only have "Strange" as elevated quality, so ignore other qualities.
-        isExplicitElevatedStrange = False
+        is_explicit_elevated_strange = False
         if "strange(e)" in name:
             item["quality2"] = 11
-            isExplicitElevatedStrange = True
+            is_explicit_elevated_strange = True
             name = name.replace("strange(e)", "").strip()
 
         if "strange" in name:
@@ -447,8 +253,8 @@ class Schema:
             name = name.replace("unusual ", "").replace(" unusualifier", "").strip()
             item["defindex"] = 9258
             item["quality"] = 5
-            schemaItem = self.getItemByItemName(name)
-            item["target"] = schemaItem["defindex"] if schemaItem else None
+            schema_item = self.get_item_by_item_name(name)
+            item["target"] = schema_item["defindex"] if schema_item else None
             return item
 
         killstreaks = {
@@ -483,39 +289,40 @@ class Schema:
             'vintage merryweather',
             'haunted kraken',
             'haunted forever!',
-            'haunted cremation'
+            'haunted cremation',
+            "haunted wick"
         ]
 
-        qualitySearch = name
+        quality_search = name
         for ex in exception:
             if ex in name: 
-                qualitySearch = name.replace(ex, "").strip()
+                quality_search = name.replace(ex, "").strip()
                 break
 
         # Get all qualities
         schema = self.raw["schema"]
-        if not any(ex in qualitySearch for ex in exception):
+        if not any(ex in quality_search for ex in exception):
             # Make sure qualitySearch does not includes in the exception list
             # example: "Haunted Ghosts Vintage Tyrolean" - will skip this
-            for qualityC in self.qualities:
-                quality = qualityC.lower()
-                if quality == "collector's" and "collector's" in qualitySearch and 'chemistry set' in qualitySearch:
+            for quality_c in self.qualities:
+                quality = quality_c.lower()
+                if quality == "collector's" and "collector's" in quality_search and 'chemistry set' in quality_search:
                     # Skip setting quality if item is Collector's Chemistrt Set
                     continue
-                if quality == "community" and qualitySearch.startswith("community sparkle"):
+                if quality == "community" and quality_search.startswith("community sparkle"):
                     # Skip if starts with Community Sparkle
                     continue
-                if qualitySearch.startswith(quality):
-                    name = name.replace(quality, "").strip()
+                if quality_search.startswith(quality):
+                    name = name.replace(quality, "", 1).strip()
                     item["quality2"] = item.get("quality2") or item.get("quality")
-                    item["quality"] = self.qualities[qualityC]
+                    item["quality"] = self.qualities[quality_c]
                     break
 
         # Check for effects
-        excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
+        exclude_atomic = True if any(exclude_name in name for exclude_name in ["bonk! atomic punch", "atomic accolade"]) else False
 
-        for effectC in self.effects:
-            effect = effectC.lower()
+        for effect_c in self.effects:
+            effect = effect_c.lower()
             if effect == "stardust" and "starduster" in name:
                 sub = name.replace("stardust", "").strip()
                 if "starduster" not in sub:
@@ -529,7 +336,13 @@ class Schema:
             if effect == "haunted ghosts" and "haunted ghosts" in name and item.get("wear"):
                 # if item name includes Haunted Ghosts and wear is defined, skip cosmetic effect and find warpaint for weapon
                 continue
-            if effect == 'atomic' and ('subatomic' in name or excludeAtomic):
+            if effect == "pumpkin patch" and "pumpkin patch" in name and item.get("wear"):
+                # if item name includes Pumpkin Patch and wear is defined, skip cosmetic effect and find warpaint for weapon
+                continue
+            if effect == "stardust" and "starduster" in name and item.get("wear"):
+                # if item name includes Starduster and wear is defined, skip cosmetic effect and find warpaint for weapon
+                continue
+            if effect == 'atomic' and ('subatomic' in name or exclude_atomic):
                 continue
             if effect == "spellbound" and ("taunt:" in name or "shred alert" in name):
                 # skip "Spellbound" for cosmetic if item is a Taunt (to get the correct "Spellbound Aspect")
@@ -542,6 +355,9 @@ class Schema:
                 continue
             if effect == "frostbite" and "frostbite bonnet" in name:
                 # Skip Frostbite effect if name include Faunted Braken
+                continue
+            if effect == "frostbite" and "frostbite fit" in name:
+                # Skip Frostbite effect if name include Frostbite Fit
                 continue
 
             if effect == "hot": 
@@ -569,7 +385,7 @@ class Schema:
                 continue
             if effect in name:
                 name = name.replace(effect, "", 1).strip()
-                item["effect"] = self.effects[effectC]
+                item["effect"] = self.effects[effect_c]
                 if  item["effect"] == 4:
                     if item["quality"] is None:
                         item["quality"] = 5
@@ -580,8 +396,8 @@ class Schema:
                 break
 
         if item.get("wear"):
-            for paintkitC in self.paintkits:
-                paintkit = paintkitC.lower()
+            for paintkit_c in self.paintkits:
+                paintkit = paintkit_c.lower()
                 if "mk.ii" in name and "mk.ii" not in paintkit:
                     continue
                 if "(green)" in name and "(green)" not in paintkit:
@@ -590,59 +406,59 @@ class Schema:
                     continue
                 if paintkit in name:
                     name = name.replace(paintkit, "").replace("|", "").strip()
-                    item["paintkit"] = self.paintkits[paintkitC]
+                    item["paintkit"] = self.paintkits[paintkit_c]
                     if item.get("effect") is not None:
                         if item.get("quality") == 5 and item.get("quality2") == 11:
-                            if not isExplicitElevatedStrange:
+                            if not is_explicit_elevated_strange:
                                 item["quality"] = 11
                                 item["quality2"] = None
                             else:
                                 item["quality"] = 15
-                        elif item.get("quality") == 5 and item.get("quality5") is None:
-                            item["quality"] == 15
+                        elif item.get("quality") == 5 and item.get("quality2") is None:
+                            item["quality"] = 15
                     if not item.get("quality"):
                         item["quality"] = 15
                     break
 
             if "war paint" not in name and "paintkit" in item:
-                oldDefindex = item["defindex"]
-                if 'pistol' in name and str(item['paintkit']) in self.getWeaponSkinsList["pistolSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["pistolSkins"][str(item['paintkit'])]
-                elif 'rocket launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["rocketLauncherSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["rocketLauncherSkins"][str(item['paintkit'])]
-                elif 'medi gun' in name and str(item['paintkit']) in self.getWeaponSkinsList["medicgunSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["medicgunSkins"][str(item['paintkit'])]
-                elif 'revolver' in name and str(item['paintkit']) in self.getWeaponSkinsList["revolverSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["revolverSkins"][str(item['paintkit'])]
-                elif 'stickybomb launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["stickybombSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["stickybombSkins"][str(item['paintkit'])]
-                elif 'sniper rifle' in name and str(item['paintkit']) in self.getWeaponSkinsList["sniperRifleSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["sniperRifleSkins"][str(item['paintkit'])]
-                elif 'flame thrower' in name and str(item['paintkit']) in self.getWeaponSkinsList["flameThrowerSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["flameThrowerSkins"][str(item['paintkit'])]
-                elif 'minigun' in name and str(item['paintkit']) in self.getWeaponSkinsList["minigunSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["minigunSkins"][str(item['paintkit'])]
-                elif 'scattergun' in name and str(item['paintkit']) in self.getWeaponSkinsList["scattergunSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["scattergunSkins"][str(item['paintkit'])]
-                elif 'shotgun' in name and str(item['paintkit']) in self.getWeaponSkinsList["shotgunSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["shotgunSkins"][str(item['paintkit'])]
-                elif 'smg' in name and str(item['paintkit']) in self.getWeaponSkinsList["smgSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["smgSkins"][str(item['paintkit'])]
-                elif 'grenade launcher' in name and str(item['paintkit']) in self.getWeaponSkinsList["grenadeLauncherSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["grenadeLauncherSkins"][str(item['paintkit'])]
-                elif 'wrench' in name and str(item['paintkit']) in self.getWeaponSkinsList["wrenchSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["wrenchSkins"][str(item['paintkit'])]
-                elif 'knife' in name and str(item['paintkit']) in self.getWeaponSkinsList["knifeSkins"]:
-                    item['defindex'] = self.getWeaponSkinsList["knifeSkins"][str(item['paintkit'])]
-                if oldDefindex != item["defindex"]: return item
+                old_defindex = item["defindex"]
+                if 'pistol' in name and str(item['paintkit']) in self.weapon_skins_list["pistol_skins"]:
+                    item['defindex'] = self.weapon_skins_list["pistol_skins"][str(item['paintkit'])]
+                elif 'rocket launcher' in name and str(item['paintkit']) in self.weapon_skins_list["rocket_launcher_skins"]:
+                    item['defindex'] = self.weapon_skins_list["rocket_launcher_skins"][str(item['paintkit'])]
+                elif 'medi gun' in name and str(item['paintkit']) in self.weapon_skins_list["medicgun_skins"]:
+                    item['defindex'] = self.weapon_skins_list["medicgun_skins"][str(item['paintkit'])]
+                elif 'revolver' in name and str(item['paintkit']) in self.weapon_skins_list["revolver_skins"]:
+                    item['defindex'] = self.weapon_skins_list["revolver_skins"][str(item['paintkit'])]
+                elif 'stickybomb launcher' in name and str(item['paintkit']) in self.weapon_skins_list["stickybomb_skins"]:
+                    item['defindex'] = self.weapon_skins_list["stickybomb_skins"][str(item['paintkit'])]
+                elif 'sniper rifle' in name and str(item['paintkit']) in self.weapon_skins_list["sniper_rifle_skins"]:
+                    item['defindex'] = self.weapon_skins_list["sniper_rifle_skins"][str(item['paintkit'])]
+                elif 'flame thrower' in name and str(item['paintkit']) in self.weapon_skins_list["flame_thrower_skins"]:
+                    item['defindex'] = self.weapon_skins_list["flame_thrower_skins"][str(item['paintkit'])]
+                elif 'minigun' in name and str(item['paintkit']) in self.weapon_skins_list["minigun_skins"]:
+                    item['defindex'] = self.weapon_skins_list["minigun_skins"][str(item['paintkit'])]
+                elif 'scattergun' in name and str(item['paintkit']) in self.weapon_skins_list["scattergun_skins"]:
+                    item['defindex'] = self.weapon_skins_list["scattergun_skins"][str(item['paintkit'])]
+                elif 'shotgun' in name and str(item['paintkit']) in self.weapon_skins_list["shotgun_skins"]:
+                    item['defindex'] = self.weapon_skins_list["shotgun_skins"][str(item['paintkit'])]
+                elif 'smg' in name and str(item['paintkit']) in self.weapon_skins_list["smg_skins"]:
+                    item['defindex'] = self.weapon_skins_list["smg_skins"][str(item['paintkit'])]
+                elif 'grenade launcher' in name and str(item['paintkit']) in self.weapon_skins_list["grenade_launcher_skins"]:
+                    item['defindex'] = self.weapon_skins_list["grenade_launcher_skins"][str(item['paintkit'])]
+                elif 'wrench' in name and str(item['paintkit']) in self.weapon_skins_list["wrench_skins"]:
+                    item['defindex'] = self.weapon_skins_list["wrench_skins"][str(item['paintkit'])]
+                elif 'knife' in name and str(item['paintkit']) in self.weapon_skins_list["knife_skins"]:
+                    item['defindex'] = self.weapon_skins_list["knife_skins"][str(item['paintkit'])]
+                if old_defindex != item["defindex"]: return item
 
         if "(paint: " in name:
             name = name.replace("(paint: ", "").replace(")", "").strip()
-            for paintC in self.paints:
-                paint = paintC.lower()
+            for paint_c in self.paints:
+                paint = paint_c.lower()
                 if paint in name:
                     name = name.replace(paint, "").strip()
-                    item["paint"] = self.paints[paintC]
+                    item["paint"] = self.paints[paint_c]
                     break
 
         if "kit fabricator" in name and item["killstreak"] > 1:
@@ -650,10 +466,10 @@ class Schema:
             item["defindex"] = 20003 if item['killstreak'] > 2 else 20002
             if name != "":
                 # Generic Fabricator Kit
-                schemaItem = self.getItemByItemName(name)
-                if not schemaItem: return item
-                item["target"] = schemaItem["defindex"]
-                item["quality"] = item.get("quality") or schemaItem.get("item_quality") # default quality
+                schema_item = self.get_item_by_item_name(name)
+                if not schema_item: return item
+                item["target"] = schema_item["defindex"]
+                item["quality"] = item.get("quality") or schema_item.get("item_quality") # default quality
             if not item.get("quality"): item["quality"] = 6
             item["output"] = 6526 if item["killstreak"] > 2 else 6523
             item["outputQuality"] = 6
@@ -661,19 +477,19 @@ class Schema:
         if ("strangifier chemistry set" not in name or "collector's" in name) and "chemistry set" in name:
             name = name.replace("collector's", "").replace("chemistry set", "").strip()
             item["defindex"] = 20007 if "festive" in name and "a rather festive tree" not in name else 20006
-            schemaItem = self.getItemByItemName(name)
-            if not schemaItem: return item
-            item["output"] = schemaItem["defindex"]
+            schema_item = self.get_item_by_item_name(name)
+            if not schema_item: return item
+            item["output"] = schema_item["defindex"]
             item["outputQuality"] = 14
-            item["quality"] = item.get("quality") or schemaItem.get("item_quality") # default quality
+            item["quality"] = item.get("quality") or schema_item.get("item_quality") # default quality
 
         if "strangifier chemistry set" in name:
-            name = name.replace("strangifier chemisty set", "").strip()
-            schemaItem = self.getItemByItemName(name)
-            if not schemaItem: return item
+            name = name.replace("strangifier chemistry set", "").strip()
+            schema_item = self.get_item_by_item_name(name)
+            if not schema_item: return item
             # Standardize defindex for Strangifier Chemistry Set
             item["defindex"] = 20000
-            item["target"] = schemaItem["defindex"]
+            item["target"] = schema_item["defindex"]
             item["quality"] = 6
             item["output"] = 6522
             item["outputQuality"] = 6
@@ -682,10 +498,10 @@ class Schema:
             name = name.replace("strangifier", "").strip()
             # Standardize to use only 6522
             item["defindex"] = 6522
-            schemaItem = self.getItemByItemName(name)
-            if not schemaItem: return name
-            item["target"] = schemaItem["defindex"]
-            item["quality"] = item.get("quality") or schemaItem.get("quality") # default quality
+            schema_item = self.get_item_by_item_name(name)
+            if not schema_item: return name
+            item["target"] = schema_item["defindex"]
+            item["quality"] = item.get("quality") or schema_item.get("item_quality") # default quality
 
         if "kit" in name and item.get("killstreak"):
             name = name.replace("kit", "").strip()
@@ -697,9 +513,9 @@ class Schema:
                 item["defindex"] = 6526
             # If Generis Kit, ignore this
             if name != "":
-                schemaItem = self.getItemByItemName(name)
-                if not schemaItem: return item
-                item["target"] = schemaItem["defindex"]
+                schema_item = self.get_item_by_item_name(name)
+                if not schema_item: return item
+                item["target"] = schema_item["defindex"]
             if not item.get("quality"): item["quality"] = 6
 
         if item.get("defindex"): return item
@@ -741,7 +557,7 @@ class Schema:
 
             elif "mann co. supply munition #" in name:
                 crateseries = int(name[26:])
-                item["defindex"] = self.munitionCratesList.get(str(crateseries))
+                item["defindex"] = self.munition_crates_list.get(str(crateseries))
                 item["crateseries"] = crateseries
                 item["quality"] = 6
                 return item
@@ -749,46 +565,56 @@ class Schema:
             number = None
 
             if "#" in name:
-                withoutNumber = name.split('#')[0]
-                number = name[len(withoutNumber) + 1:].strip()
+                without_number = name.split('#')[0]
+                number = name[len(without_number) + 1:].strip()
                 name = name.split('#')[0].strip()
 
-            if name in retiredKeysNames:
-                for retiredKey in retiredKeys:
-                    if retiredKey['name'].lower() == name:
-                        item["defindex"] = retiredKey["defindex"]
+            if name in retired_keys_names:
+                for retired_key in retired_keys:
+                    if retired_key["name"].lower() == name:
+                        item["defindex"] = retired_key["defindex"]
                         item["quality"] = item.get("quality") or 6
                         return item
 
-            schemaItem = self.getItemByNameWithThe(name)
-            if not schemaItem: return item
-            item["defindex"] = schemaItem["defindex"]
-            item["quality"] = item.get("quality") or schemaItem.get("item_quality") # default quality
+            schema_item = self.get_item_by_name_with_the(name)
+            if not schema_item: return item
+            item["defindex"] = schema_item["defindex"]
+            item["quality"] = item.get("quality") if item.get("quality") is not None else schema_item.get("item_quality") # default quality
 
             # Fix defindex for Exclusive Genuine items
             if item["quality"] == 1:
-                if str(item["defindex"]) in exclusiveGenuine:
-                    item["defindex"] = exclusiveGenuine[str(item['defindex'])]
+                if str(item["defindex"]) in exclusive_genuine.keys():
+                    item["defindex"] = exclusive_genuine[str(item['defindex'])]
 
-            if schemaItem["item_class"] == "supply_crate":
-                item["crateseries"] = self.crateSeriesList.get(str(item["defindex"])) or None
+            if schema_item["item_class"] == "supply_crate":
+                item["crateseries"] = self.crate_series_list.get(str(item["defindex"])) or None
             
-            elif schemaItem["item_class"] != "supply_crate" and number is not None:
+            elif schema_item["item_class"] != "supply_crate" and number is not None:
                 item["craftnumber"] = number
 
         return item
 
 
-    # Gets schema item by defindex
-    def getItemByDefindex(self, defindex):
+    def get_item_by_defindex(self, defindex: int) -> dict:
+        """
+        Gets schema item by defindex.
+        
+        Args:
+            defindex (int): The defindex of the item.
+            
+        Returns:
+            dict: The item object.
+        """
         items = self.raw["schema"]["items"]
-        itemsCount = len(items)
+        items_count = len(items)
+
         start = 0
-        end = itemsCount - 1
-        iterLim = math.ceil(math.log2(itemsCount)) + 2
+        end = items_count - 1
+        iter_lim = math.ceil(math.log2(items_count)) + 2
+
         while start <= end:
-            if iterLim <= 0: break # use fallback search
-            iterLim = iterLim - 1
+            if iter_lim <= 0: break # use fallback search
+            iter_lim = iter_lim - 1
             mid = math.floor((start + end) / 2)
             if items[mid]["defindex"] < defindex:
                 start = mid + 1
@@ -803,18 +629,26 @@ class Schema:
         return None
 
 
-    # Gets schema item by item name
-    def getItemByItemName(self, name):
+    def get_item_by_item_name(self, name: str) -> dict:
+        """
+        Gets schema item by item name.
+
+        Args:
+            name (str): The name of the item.
+        
+        Returns:
+            dict: The item object.
+        """
         items = self.raw["schema"]["items"]
 
         for item in items:
             if name.lower() == item["item_name"].lower():
                 if item["item_name"] == "Name Tag" and item["defindex"] == 2093:
-                    # skip and let it find Name Tag with defindex 5020
+                    # skip and let it find name tag with defindex 5020
                     continue
 
                 if item["item_quality"] == 0:
-                    # skip if Stock Quality
+                    # skip if stock quality
                     continue
 
                 return item
@@ -822,22 +656,38 @@ class Schema:
         return None
 
 
-    # Gets schema item by sku
-    def getItemBySKU(self, sku):
-        return self.getItemByDefindex(SKU.fromString(sku)["defindex"])
+    def get_item_by_sku(self, sku: str) -> dict:
+        """
+        Gets schema item by SKU.
+        
+        Args:
+            sku (str): The SKU of the item.
+        
+        Returns:
+            dict: The item object.
+        """
+        return self.get_item_by_defindex(SKU.from_string(sku)["defindex"])
 
 
-    # Gets schema attribute by defindex
-    def getAttributeByDefindex(self, defindex):
+    def get_attribute_by_defindex(self, defindex: int) -> dict:
+        """
+        Gets schema attribute by defindex.
+        
+        Args:
+            defindex (int): The defindex of the attribute.
+            
+        Returns:
+            dict: The attribute object.
+        """
         attributes = self.raw["schema"]["attributes"]
-        attributesCount = len(attributes)
+        attributes_count = len(attributes)
         
         start = 0
-        end = attributesCount - 1
-        iterLim = math.ceil(math.log2(attributesCount)) + 2
+        end = attributes_count - 1
+        iter_lim = math.ceil(math.log2(attributes_count)) + 2
 
         while start <= end:
-            if iterLim <= 0: break # use fallback search
+            if iter_lim <= 0: break # use fallback search
             mid = math.floor((start + end) / 2)
             if attributes[mid]["defindex"] < defindex:
                 start = mid + 1
@@ -852,8 +702,16 @@ class Schema:
         return None
 
 
-    # Gets quality name by id
-    def getQualityById(self, id):
+    def get_quality_by_id(self, id: int) -> str:
+        """
+        Gets quality name by id.
+        
+        Args:
+            id (int): The id of the quality.
+        
+        Returns:
+            str: The name of the quality.
+        """
         qualities = self.raw["schema"]["qualities"]
         
         for type in qualities:
@@ -864,28 +722,45 @@ class Schema:
         return None
 
     
-    # Gets quality id by name
-    def getQualityByName(self, name):
-        qualityNames = self.raw["schema"]["qualityNames"]
+    def get_quality_by_name(self, name: str) -> int:
+        """
+        Gets quality id by name.
         
-        for type in qualityNames:
-            if not qualityNames.get(type): continue
+        Args:
+            name (str): The name of the quality.
+            
+        Returns:
+            int: The id of the quality.
+        """
+        quality_names = self.raw["schema"]["qualityNames"]
+        
+        for type in quality_names:
+            if not quality_names.get(type): continue
 
-            if name.lower() == qualityNames[type].lower(): return self.raw["schema"]["qualities"][type]
+            if name.lower() == quality_names[type].lower(): return self.raw["schema"]["qualities"][type]
         
         return None
 
     
-    # Gets effect name by id
-    def getEffectById(self, id):
+    def get_effect_by_id(self, id: int) -> str:
+        """
+        Gets effect name by id.
+        
+        Args:
+            id (int): The id of the effect.
+            
+        Returns:
+            str: The name of the effect.
+        """
         particles = self.raw["schema"]["attribute_controlled_attached_particles"]
-        particlesCount = len(particles)
+        particles_count = len(particles)
 
         start = 0
-        end = particlesCount -1
-        iterLim = math.ceil(math.log2(particlesCount)) + 2
+        end = particles_count -1
+        iter_lim = math.ceil(math.log2(particles_count)) + 2
+
         while start <= end:
-            if iterLim <= 0: break # use fallback search
+            if iter_lim <= 0: break # use fallback search
             mid = math.floor((start + end) / 2)
             if particles[mid]["id"] < id: 
                 start = mid + 1
@@ -900,8 +775,16 @@ class Schema:
         return None
 
 
-    # Gets effect id by name
-    def getEffectIdByName(self, name):
+    def get_effect_id_by_name(self, name: str) -> int:
+        """
+        Gets effect id by name.
+        
+        Args:
+            name (str): The name of the effect.
+        
+        Returns:
+            int: The id of the effect.
+        """
         particles = self.raw["schema"]["attribute_controlled_attached_particles"]
         
         for effect in particles:
@@ -910,8 +793,16 @@ class Schema:
         return None
 
 
-    # Gets skin name by id
-    def getSkinById(self, id):
+    def get_skin_by_id(self, id: int) -> str:
+        """
+        Gets skin name by id.
+        
+        Args:
+            id (int): The id of the skin.
+        
+        Returns:
+            str: The name of the skin.
+        """
         paintkits = self.raw["schema"]['paintkits']
 
         if not paintkits.get(str(id)): return None
@@ -919,8 +810,16 @@ class Schema:
         return paintkits[str(id)]
 
 
-    # Gets skin id by name
-    def getSkinByName(self, name):
+    def get_skin_by_name(self, name: str) -> int:
+        """
+        Gets skin id by name.
+        
+        Args:
+            name (str): The name of the skin.
+        
+        Returns:
+            int: The id of the skin.
+        """
         paintkits = self.raw["schema"]['paintkits']
 
         for id in paintkits:
@@ -931,26 +830,39 @@ class Schema:
         return None
 
 
-    # Gets the name and id of unusual effects
-    def getUnusualEffects(self):
-        unusualEffects = []
+    def get_unusual_effects(self) -> list:
+        """
+        Gets the name and id of unusual effects.
+        
+        Returns:
+            list: The list of unusual effects.
+        """
+        unusual_effects = []
 
         for effect in self.raw["schema"]["attribute_controlled_attached_particles"]:
-            unusualEffects.append({"name": effect["name"], "id": effect["id"]})
+            unusual_effects.append({"name": effect["name"], "id": effect["id"]})
         
-        return unusualEffects
+        return unusual_effects
 
 
-    # Gets paint name by Decimal numeral system
-    def getPaintNameByDecimal(self, decimal):
+    def get_paint_name_by_decimal(self, decimal: int) -> str:
+        """
+        Gets paint name by decimal numeral system.
+        
+        Args:
+            decimal (int): The decimal numeral system of the paint.
+            
+        Returns:
+            str: The name of the paint.
+        """
         if decimal == 5801378: return "Legacy Paint"
 
-        paintCans = []
+        paint_cans = []
         for item in self.raw["schema"]["items"]:
             if "Paint Can" in item["name"] and item["name"] != "Paint Can":
-                paintCans.append(item)
+                paint_cans.append(item)
 
-        for paint in paintCans:
+        for paint in paint_cans:
             if paint["attributes"] is None: continue
 
             for attr in paint["attributes"]:
@@ -959,16 +871,24 @@ class Schema:
         return None
 
 
-    # Gets paint Decimal numeral system by name
-    def getPaintDecimalByName(self, name):
+    def get_paint_decimal_by_name(self, name: str) -> int:
+        """
+        Gets paint decimal numeral system by name.
+        
+        Args:
+            name (str): The name of the paint.
+        
+        Returns:
+            int: The decimal numeral system of the paint.
+        """
         if name == "Legacy Paint": return 5801378
 
-        paintCans = []
+        paint_cans = []
         for item in self.raw["schema"]["items"]:
             if "Paint Can" in item["name"] and item["name"] != "Paint Can":
-                paintCans.append(item)
+                paint_cans.append(item)
         
-        for paint in paintCans:
+        for paint in paint_cans:
             if paint["attributes"] is None: continue
 
             if name.lower() == paint["item_name"].lower(): return paint["attributes"][0]["value"]
@@ -976,36 +896,54 @@ class Schema:
         return None
 
 
-    # Gets the name and partial sku for painted items
-    def getPaints(self):
-        paintCans = []
+    def get_paints(self) -> dict:
+        """
+        Gets the name and partial SKU for painted items.
+        
+        Returns:
+            dict: The name and partial SKU of painted items.
+        """
+        paint_cans = []
         for item in self.raw["schema"]["items"]:
             if "Paint Can" in item["name"] and item["name"] != "Paint Can":
-                paintCans.append(item)
+                paint_cans.append(item)
 
-        toObject = {}
+        to_object = {}
         
-        for paintCan in paintCans:
-            if paintCan["attributes"] is None: continue
+        for paint_can in paint_cans:
+            if paint_can["attributes"] is None: continue
 
-            toObject[paintCan["item_name"]] = int(paintCan['attributes'][0]['value'])
+            to_object[paint_can["item_name"]] = int(paint_can['attributes'][0]['value'])
 
-        toObject["Legacy Paint"] = "5801378"
+        to_object["Legacy Paint"] = "5801378"
 
-        return toObject
+        return to_object
 
 
-    # Gets an array of paintable items' defindex
-    def getPaintableItemDefindexes(self):
-        paintableItemDefindexes = []
+    def get_paintable_item_defindexes(self) -> list:
+        """
+        Gets an array of paintable items' defindex.
+        
+        Returns:
+            list: The array of paintable items' defindex.
+        """
+        paintable_item_defindexes = []
+        
         for item in self.raw["schema"]["items"]:
-            if "capabilities" in item and "paintable" in item["capabilities"] and item["capabilities"]["paintable"] is True: paintableItemDefindexes.append(item["defindex"])
-        return paintableItemDefindexes
+            if "capabilities" in item and "paintable" in item["capabilities"] and item["capabilities"]["paintable"] is True: 
+                paintable_item_defindexes.append(item["defindex"])
+
+        return paintable_item_defindexes
 
     
-    # Gets the name of partial sku for strange parts items
-    def getStrangeParts(self):
-        partsToExclude = {
+    def get_strange_parts(self) -> dict:
+        """
+        Gets the name and partial SKU for strange parts items.
+        
+        Returns:
+            dict: The name and partial SKU of strange parts items.
+        """
+        parts_to_exclude = {
             'Ubers',
             'Kill Assists',
             'Sentry Kills',
@@ -1048,22 +986,27 @@ class Schema:
             'Contract Points Contributed To Friends'
         }
 
-        toObject = {}
+        to_object = {}
 
         # Filter out built-in parts and also filter repeated "Kills"
         parts = []
         for type in self.raw["schema"]["kill_eater_score_types"]:
-            if type["type_name"] not in partsToExclude and type["type"] not in [0, 97]: parts.append(type)
+            if type["type_name"] not in parts_to_exclude and type["type"] not in [0, 97]: parts.append(type)
 
         for part in parts:
-            toObject[part["type_name"]] = f"sp{part['type']}"
+            to_object[part["type_name"]] = f"sp{part['type']}"
 
-        return toObject
+        return to_object
 
 
-    # Get an array of item objects for craftable weapons
-    def getCraftableWeaponsSchema(self):
-        weaponsToExclude = {
+    def get_craftable_weapons_schema(self) -> list:
+        """
+        Gets an array of item objects for craftable weapons.
+        
+        Returns:
+            list: The array of item objects for craftable weapons.
+        """
+        weapons_to_exclude = {
             # Exclude these weapons
             266, # Horseless Headless Horsemann's Headtaker
             452, # Three-Rune Blade
@@ -1086,52 +1029,79 @@ class Schema:
             30474 # Nostromo Napalmer
         }
 
-        craftableWeapons = []
+        craftable_weapons = []
         for item in self.raw["schema"]["items"]:
-            if item["defindex"] not in weaponsToExclude and item["item_quality"] == 6 and item.get("craft_class") == "weapon": 
-                craftableWeapons.append(item)
+            if item["defindex"] not in weapons_to_exclude and item["item_quality"] == 6 and item.get("craft_class") == "weapon": 
+                craftable_weapons.append(item)
 
-        return craftableWeapons
+        return craftable_weapons
 
 
-    # Get an array of SKU for craftable weapons by class used for crafting
-    def getWeaponsForCraftingByClass(self, charClass):
-        if charClass not in {'Scout', 'Soldier', 'Pyro', 'Demoman', 'Heavy', 'Engineer', 'Medic', 'Sniper', 'Spy'}:
-            raise Exception(f'Entered class "{charClass}" is not a valid character class.\nValid character classes (case sensitive): "Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy".')
+    def get_weapons_for_crafting_by_class(self, char_class: str) -> list:
+        """
+        Gets an array of SKU for craftable weapons by class used for crafting.
+        
+        Args:
+            char_class (str): The character class.
+        
+        Returns:
+            list: The array of SKU for craftable weapons by class used for crafting.
+        """
+        if char_class not in {'Scout', 'Soldier', 'Pyro', 'Demoman', 'Heavy', 'Engineer', 'Medic', 'Sniper', 'Spy'}:
+            raise Exception(f'Entered class "{char_class}" is not a valid character class.\nValid character classes (case sensitive): "Scout", "Soldier", "Pyro", "Demoman", "Heavy", "Engineer", "Medic", "Sniper", "Spy".')
         
         weapons = []
-        for item in self.getCraftableWeaponsSchema():
-            if charClass in item["used_by_classes"]: weapons.append(f'{item["defindex"]};6')
+        for item in self.get_craftable_weapons_schema():
+            if char_class in item["used_by_classes"]: weapons.append(f'{item["defindex"]};6')
 
         return weapons
 
     
-    # Get an array of SKU for Craftable weapons used for trading
-    def getCraftableWeaponsForTrading(self):
+    def get_craftable_weapons_for_trading(self) -> list:
+        """
+        Gets an array of SKU for craftable weapons used for trading.
+        
+        Returns:
+            list: The array of SKU for craftable weapons used for trading.
+        """
         weapons = []
-        for item in self.getCraftableWeaponsSchema():
+        for item in self.get_craftable_weapons_schema():
             weapons.append(f"{item['defindex']};6")
+
         return weapons
 
 
-    # Get an array of SKU for Non-Craftable weapons used for trading
-    def getUncraftableWeaponsForTrading(self):
+    def get_uncraftable_weapons_for_trading(self) -> list:
+        """
+        Gets an array of SKU for non-craftable weapons used for trading.
+        
+        Returns:
+            list: The array of SKU for non-craftable weapons used for trading.
+        """
         weapons = []
-        for item in self.getCraftableWeaponsSchema():
-            if item["defindex"] not in [348, 349]: weapons.append(f"{item['defindex']};6;uncraftable")
+        for item in self.get_craftable_weapons_schema():
+            if item["defindex"] not in [48, 349, 1178, 1179, 1180, 1181, 1190]: 
+                weapons.append(f"{item['defindex']};6;uncraftable")
+
         return weapons
 
 
-    def getCrateSeriesList(self):
+    def get_crate_series_list(self) -> dict:
+        """
+        Gets the name and series number of crates.
+        
+        Returns:
+            dict: The name and series number of crates.
+        """
         items = self.raw["schema"]["items"]
 
-        crateseries = {}
+        crate_series = {}
         for item in items:
             if "attributes" in item:
                 attributes = item["attributes"]
                 for attr in attributes:
                     if attr["name"] == "set supply crate series": 
-                        crateseries.update({str(item["defindex"]): int(attr["value"])})
+                        crate_series.update({str(item["defindex"]): int(attr["value"])})
                         break
 
         items = self.raw["items_game"]["items"]
@@ -1139,68 +1109,97 @@ class Schema:
 
         for defindex in defindexes:
             if items[defindex].get("static_attrs") and items[defindex]["static_attrs"].get("set supply crate series"):
-                crateseries.update({str(defindex): int(items[defindex]["static_attrs"]["set supply crate series"])})
+                crate_series.update({str(defindex): int(items[defindex]["static_attrs"]["set supply crate series"])})
 
         items = None
-        return crateseries
+        return crate_series
 
 
-    def getQualities(self):
+    def get_qualities(self) -> dict:
+        """
+        Gets the name and id of qualities.
+        
+        Returns:
+            dict: The name and id of qualities.
+        """
         schema = self.raw["schema"]
         qualities = {}
-        for qualityType in schema["qualities"]:
-            qualities.update({str(schema["qualityNames"][qualityType]): int(schema["qualities"][qualityType])})
+        for quality_type in schema["qualities"]:
+            qualities.update({str(schema["qualityNames"][quality_type]): int(schema["qualities"][quality_type])})
+
         return qualities
 
 
-    def getParticleEffects(self):
+    def get_particle_effects(self) -> dict:
+        """
+        Gets the name and id of particle effects.
+        
+        Returns:
+            dict: The name and id of particle effects.
+        """
         previous = ""
         effects = {}
         for particle in self.raw["schema"]["attribute_controlled_attached_particles"]:
-            particleName = particle["name"]
-            if particleName != previous:
-                effects.update({str(particleName): int(particle["id"])})
-                if particleName == "Eerie Orbiting Fire":
+            particle_name = particle["name"]
+            if particle_name != previous:
+                effects.update({str(particle_name): int(particle["id"])})
+                if particle_name == "Eerie Orbiting Fire":
                     del effects["Orbiting Fire"]
                     effects.update({"Orbiting Fire": 33})
 
-                if particleName == "Nether Trail":
+                if particle_name == "Nether Trail":
                     del effects["Ether Trail"]
                     effects.update({"Ether Trail": 103})
 
-                if particleName == "Refragmenting Reality":
+                if particle_name == "Refragmenting Reality":
                     del effects["Fragmenting Reality"]
                     effects.update({"Fragmenting Reality": 141})
-            previous = particleName  
+            previous = particle_name  
+
         # id 326 has an empty name causing things to break
         effects.pop('', None)
         return effects
 
 
-    def getPaintKitsList(self):
+    def get_paint_kits_list(self) -> dict:
+        """
+        Gets the name and id of paint kits.
+        
+        Returns:
+            dict: The name and id of paint kits.
+        """
         schema = self.raw["schema"]
         return {schema["paintkits"][paintkit]: int(paintkit) for paintkit in schema["paintkits"]}
 
 
-    def checkExistence(self, item):
-        schemaItem = self.getItemByDefindex(item["defindex"])
-        if not schemaItem: return False
+    def check_existence(self, item: dict) -> bool:
+        """
+        Checks if the item exists in the schema.
+        
+        Args:
+            item (dict): The item object.
+        
+        Returns:
+            bool: True if the item exists, False otherwise.
+        """
+        schema_item = self.get_item_by_defindex(item["defindex"])
+        if not schema_item: return False
 
         # Items with default quality
-        if schemaItem["item_quality"] in {0, 3, 5, 11}:
+        if schema_item["item_quality"] in {0, 3, 5, 11}:
             # default Normal (Stock items), Vintage (1156), Unusual (266, 267), and Strange (655) items
-            if item.get("quality") != schemaItem["item_quality"]: return False
+            if item.get("quality") != schema_item["item_quality"]: return False
 
         # Exclusive Genuine items
-        if ((item.get("quality") != 1 and item["defindex"] in [exclusiveGenuineReversed.get(egr) for egr in exclusiveGenuineReversed]) or 
-            (item.get("quality") == 1 and item["defindex"] in [exclusiveGenuine.get(eg) for eg in exclusiveGenuine])):
+        if ((item.get("quality") != 1 and item["defindex"] in [exclusive_genuine_reversed.get(egr) for egr in exclusive_genuine_reversed]) or 
+            (item.get("quality") == 1 and item["defindex"] in [exclusive_genuine.get(eg) for eg in exclusive_genuine])):
             # if quality not 1 AND item.defindex is the one that should be Genuine only, OR
             # if quality is 1 AND item.defindex is the one that can be any quality, return null.
             return False
 
         # Retired keys
-        for retiredKey in retiredKeys:
-            if retiredKey.get("defindex") == item["defindex"]:
+        for retired_key in retired_keys:
+            if retired_key.get("defindex") == item["defindex"]:
                 if item["defindex"] in [5713, 5716, 5717, 5762]:
                     if item.get("craftable") is True:
                         return False
@@ -1209,7 +1208,7 @@ class Schema:
                         return False
 
         # Crates/Cases
-        def haveOtherAttributeForCrateOrCase():
+        def have_other_attribute_for_crate_or_case():
             return (
                 item["quality"] != 6 or
                 item["killstreak"] != 0 or
@@ -1225,103 +1224,120 @@ class Schema:
                 item["outputQuality"] is not None or
                 item["paint"] is not None
             )
-        if schemaItem["item_class"] == "supply_crate" and item.get("crateseries") is None:
+        if schema_item["item_class"] == "supply_crate" and item.get("crateseries") is None:
             if item["defindex"] not in {5739, 5760, 5737, 5738}:
                 # If not seriesless, return false
                 # Mann Co. Director's Cut Reel, Mann Co. Audition Reel, and Mann Co. Stockpile Crate
                 return False
             # Unlocked Creepy 5763, 5764, 5765, 5766, 5767, 5768, 5769, 5770, 5771
             # Unlocked Crates 5850, 5851, 5852, 5853, 5854, 5855, 5856, 5857, 5858, 5860
-            if haveOtherAttributeForCrateOrCase(): return False
+            if have_other_attribute_for_crate_or_case(): return False
         if item.get("crateseries"):
             # Run a check if the input item is actually exist or not for crates/cases
-            if haveOtherAttributeForCrateOrCase(): return False
-            if schemaItem["item_class"] != "supply_crate":
+            if have_other_attribute_for_crate_or_case(): return False
+            if schema_item["item_class"] != "supply_crate":
                 # Not a crate or case
                 return False
             elif (item["crateseries"] not in {1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75, 2, 4, 8, 11, 14, 17, 20, 24, 27,
                 32, 37, 42, 44, 49, 56, 71, 76, 5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77, 30,
                 40, 50, 82, 83, 84, 85, 90, 91, 92, 103}):
                 # if item["crateseries"] not included in the single defindex multiple series crate:
-                if item["crateseries"] not in [self.crateSeriesList[cratesSeries] for cratesSeries in self.crateSeriesList]:
-                    # if item["crateseries"] is not included in the crateSeriesList, does not exist.
+                if item["crateseries"] not in [self.crate_series_list[crates_series] for crates_series in self.crate_series_list]:
+                    # if item["crateseries"] is not included in the crate_series_list, does not exist.
                     return False
                 # Check for specific crates/cases
-                if item["crateseries"] != self.crateSeriesList[item["defindex"]]: return False
+                if item["crateseries"] != self.crate_series_list[item["defindex"]]: return False
             elif not (
                 (item["crateseries"] in {1, 3, 7, 12, 13, 18, 19, 23, 26, 31, 34, 39, 43, 47, 54, 57, 75} and item["defindex"] == 5022) or
                 (item["crateseries"] in {2, 4, 8, 11, 14, 17, 20, 24, 27, 32, 37, 42, 44, 49, 56, 71, 76} and item["defindex"] == 5041) or
                 (item["crateseries"] in {5, 9, 10, 15, 16, 21, 25, 28, 29, 33, 38, 41, 45, 55, 59, 77} and item["defindex"] == 5045) or
                 (item["crateseries"] in {30, 40, 50} and item["defindex"] == 5068) or
-                (self.munitionCratesList.get(str(item["crateseries"])) and item["defindex"] == self.munitionCratesList.get(str(item["crateseries"])))):
+                (self.munition_crates_list.get(str(item["crateseries"])) and item["defindex"] == self.munition_crates_list.get(str(item["crateseries"])))):
                 # if single defindex multiple series crate don't match, does not exist
                 return False
 
         return True
 
 
-    # Gets the name of an item with specific attributes
-    def getName(self, item, proper=True, usePipeForSkin=False, scmFormat=False):
-        schemaItem = self.getItemByDefindex(item["defindex"])
-        if schemaItem is None: return None
+    def get_name(
+            self, 
+            item: dict, 
+            proper: bool = True, 
+            use_pipe_for_skin: bool = False, 
+            scm_format: bool = False
+            ) -> str:
+        """
+        Gets the name of an item with specific attributes.
+        
+        Args:
+            item (dict): The item object.
+            proper (bool, optional): The proper name of the item. Defaults to True.
+            use_pipe_for_skin (bool, optional): The pipe for skin. Defaults to False.
+            scm_format (bool, optional): The Steam Community Market format. Defaults to False.
+
+        Returns:
+            str: The name of the item.
+        """
+        schema_item = self.get_item_by_defindex(item["defindex"])
+        if schema_item is None: return None
 
         name = ""
 
-        if not scmFormat and item.get("tradable") is False: name = "Non-Tradable "
+        if not scm_format and item.get("tradable") is False: name = "Non-Tradable "
 
-        if not scmFormat and item.get("craftable") is False: name += "Non-Craftable "
+        if not scm_format and item.get("craftable") is False: name += "Non-Craftable "
 
         if item.get("quality2"):
             # Elevated quality
-            name += self.getQualityById(item["quality2"]) + ("(e)" if not scmFormat and (item["wear"] is not None or item["paintkit"] is not None) else "") + " "
+            name += self.get_quality_by_id(item["quality2"]) + ("(e)" if not scm_format and (item["wear"] is not None or item["paintkit"] is not None) else "") + " "
 
         if ((item["quality"] != 6 and item["quality"] != 15 and item["quality"]  != 5) or
             (item["quality"]  == 5 and not item.get("effect")) or
             (item["quality"] == 6 and item.get("quality2")) or
-            (item["quality"] == 5 and scmFormat) or 
-            schemaItem["item_quality"] == 5):
+            (item["quality"] == 5 and scm_format) or 
+            schema_item["item_quality"] == 5):
             # If the quality is Unique (and is Elevated quality) 
             # or not Unique, Decorated, or Unusual, 
             # or if the quality is Unusual but it does not have an effect, 
             # or if the item can only be unusual, 
             # or if it's unusual and Steam Community Market format,
             # then add the quality
-            name += self.getQualityById(item["quality"]) + " "
+            name += self.get_quality_by_id(item["quality"]) + " "
 
-        if not scmFormat and item.get("effect"): name += self.getEffectById(item["effect"]) + " "
+        if not scm_format and item.get("effect"): name += self.get_effect_by_id(item["effect"]) + " "
 
         if item.get("festive") is True: name += "Festivized "
 
         if item.get("killstreak") and item["killstreak"] > 0: name += ['Killstreak', 'Specialized Killstreak', 'Professional Killstreak'][item["killstreak"] - 1] + ' '
 
-        if item.get("target"): name += self.getItemByDefindex(item["target"])["item_name"] + " "
+        if item.get("target"): name += self.get_item_by_defindex(item["target"])["item_name"] + " "
 
-        if item.get("outputQuality") and item["outputQuality"] != 6: name = self.getQualityById(item["outputQuality"]) + " " + name
+        if item.get("outputQuality") and item["outputQuality"] != 6: name = self.get_quality_by_id(item["outputQuality"]) + " " + name
 
-        if item.get("output"): name += self.getItemByDefindex(item["output"])["item_name"] + " "
+        if item.get("output"): name += self.get_item_by_defindex(item["output"])["item_name"] + " "
 
         if item.get("australium") is True: name += "Australium "
 
-        if item.get("paintkit") and type(item["paintkit"]) == int: name += self.getSkinById(item["paintkit"]) + (" " if usePipeForSkin is False else " | ")
+        if item.get("paintkit") and type(item["paintkit"]) == int: name += self.get_skin_by_id(item["paintkit"]) + (" " if use_pipe_for_skin is False else " | ")
 
-        if proper is True and name == "" and schemaItem["proper_name"] is True: name = "The "
+        if proper is True and name == "" and schema_item["proper_name"] is True: name = "The "
 
-        for retiredKey in retiredKeys:
-            if retiredKey.get("defindex") == item["defindex"]:
-                name += retiredKey["name"]
+        for retired_key in retired_keys:
+            if retired_key.get("defindex") == item["defindex"]:
+                name += retired_key["name"]
                 break
         else:
-            name += schemaItem["item_name"]
+            name += schema_item["item_name"]
 
         if item.get("wear"): name += ' (' + ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle Scarred'][item["wear"] - 1] + ')'
 
         if item.get("crateseries"):
-            if "attributes" in schemaItem and schemaItem["attributes"][0]["class"] == "supply_crate_series":
-                hasAttr = True
+            if "attributes" in schema_item and schema_item["attributes"][0]["class"] == "supply_crate_series":
+                has_attr = True
             else:
-                hasAttr = False
-            if scmFormat:
-                if hasAttr:
+                has_attr = False
+            if scm_format:
+                if has_attr:
                     name += " Series %23" + str(item["crateseries"])
                 # Else we don't need to add #number
             else:
@@ -1329,13 +1345,13 @@ class Schema:
         elif item.get("craftnumber"):
             name += ' #' + str(item["craftnumber"])
 
-        if not scmFormat and item.get("paint"): name += f" (Paint: {self.getPaintNameByDecimal(item['paint'])})"
+        if not scm_format and item.get("paint"): name += f" (Paint: {self.get_paint_name_by_decimal(item['paint'])})"
 
-        if scmFormat and schemaItem["item_name"] == "Chemistry Set" and item.get("output") == 6522:
-            if item.get("target") and strangifierChemistrySetSeries.get(str(item["target"])):
-                name += f" Series %23{strangifierChemistrySetSeries.get(str(item['target']))}"
+        if scm_format and schema_item["item_name"] == "Chemistry Set" and item.get("output") == 6522:
+            if item.get("target") and strangifier_chemistry_set_series.get(str(item["target"])):
+                name += f" Series %23{strangifier_chemistry_set_series.get(str(item['target']))}"
 
-        if scmFormat and item.get('wear') is not None and item.get('effect') is not None and item.get('quality') == 15:
+        if scm_format and item.get('wear') is not None and item.get('effect') is not None and item.get('quality') == 15:
             # Need to add "Unusual" for Unusual Skins for Steam Community Market
             # for item quality 15
             name = 'Unusual ' + name
@@ -1343,118 +1359,166 @@ class Schema:
         return name
 
 
-    # Gets name
-    def getNameFromSku(self, sku):
-        if self.testSKU(sku) is True:
-            return self.getName(SKU.fromString(sku))
+    def get_name_from_sku(self, sku: str) -> str:
+        """
+        Gets the name of an item with specific SKU.
+        
+        Args:
+            sku (str): The SKU of the item.
+            
+        Returns:
+            str: The name of the item.
+        """
+        if self.test_sku(sku) is True:
+            return self.get_name(SKU.from_string(sku))
         else:
             return None
 
     
-    # Check sku if it's valid or not
-    def testSKU(self, sku):
+    def test_sku(self, sku: str) -> bool:
+        """
+        Checks if the SKU is valid or not.
+        
+        Args:
+            sku (str): The SKU of the item.
+        
+        Returns:
+            bool: True if the SKU is valid, False otherwise."""
         if bool(re.match(
             "^(\d+);([0-9]|[1][0-5])(;((uncraftable)|(untrad(e)?able)|(australium)|(festive)|(strange)|((u|pk|td-|c|od-|oq-|p)\d+)|(w[1-5])|(kt-[1-3])|(n((100)|[1-9]\d?))))*?$", sku)):
             return True
 
     
-    # Gets munition crate list
-    def getMunitionCratesList(self):
-        munitionCratesList = {}
+    def get_munition_crates_list(self) -> dict:
+        """
+        Gets the name and defindex of munition crates.
+        
+        Returns:
+            dict: The name and defindex of munition crates.
+        """
+        munition_crates_list = {}
         items = self.raw["schema"]["items"]
         for item in items:
             if item["item_name"] == "Mann Co. Supply Munition":
-                munitionCratesList.update({str(item["attributes"][0]["value"]): int(item["defindex"])})
-        return munitionCratesList
+                munition_crates_list.update({str(item["attributes"][0]["value"]): int(item["defindex"])})
+
+        return munition_crates_list
 
 
-    # Gets weapon skins list
-    def getWeaponSkinsList(self):
+    def get_weapon_skins_list(self) -> dict:
+        """
+        Gets the name and defindex of weapon skins.
+        
+        Returns:
+            dict: The name and defindex of weapon skins.
+        """
         items = self.raw["items_game"]["items"]
-        pistolSkins = {}
-        rocketLauncherSkins = {}
-        medicgunSkins = {}
-        revolverSkins = {}
-        stickybombSkins = {}
-        sniperRifleSkins = {}
-        flameThrowerSkins = {}
-        minigunSkins = {}
-        scattergunSkins = {}
-        shotgunSkins = {}
-        smgSkins = {}
-        wrenchSkins = {}
-        grenadeLauncherSkins = {}
-        knifeSkins = {}
+        pistol_skins = {}
+        rocket_launcher_skins = {}
+        medicgun_skins = {}
+        revolver_skins = {}
+        stickybomb_skins = {}
+        sniper_rifle_skins = {}
+        flame_thrower_skins = {}
+        minigun_skins = {}
+        scattergun_skins = {}
+        shotgun_skins = {}
+        smg_skins = {}
+        wrench_skins = {}
+        grenade_launcher_skins = {}
+        knife_skins = {}
         for item in items:
             if items[item].get("prefab"):
                 if items[item]["prefab"] == "paintkit_weapon_pistol":
-                    pistolSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    pistol_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_rocketlauncher":
-                    rocketLauncherSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    rocket_launcher_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_medigun":
-                    medicgunSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    medicgun_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_revolver":
-                    revolverSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    revolver_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_stickybomb_launcher":
-                    stickybombSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    stickybomb_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_sniperrifle":
-                    sniperRifleSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    sniper_rifle_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_flamethrower":
-                    flameThrowerSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    flame_thrower_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_minigun":
-                    minigunSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    minigun_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_scattergun":
-                    scattergunSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    scattergun_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_shotgun":
-                    shotgunSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    shotgun_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_smg":
-                    smgSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    smg_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_wrench":
-                    wrenchSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    wrench_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_grenadelauncher":
-                    grenadeLauncherSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+                    grenade_launcher_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
                 elif items[item]["prefab"] == "paintkit_weapon_knife":
-                    knifeSkins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
-        weaponSkinsList = {
-            "pistolSkins": pistolSkins,
-            "rocketLauncherSkins": rocketLauncherSkins,
-            "medicgunSkins": medicgunSkins,
-            "revolverSkins": revolverSkins,
-            "stickybombSkins": stickybombSkins,
-            "sniperRifleSkins": sniperRifleSkins,
-            "flameThrowerSkins": flameThrowerSkins,
-            "minigunSkins": minigunSkins,
-            "scattergunSkins": scattergunSkins,
-            "shotgunSkins": shotgunSkins,
-            "smgSkins": smgSkins,
-            "wrenchSkins": wrenchSkins,
-            "grenadeLauncherSkins": grenadeLauncherSkins,
-            "knifeSkins": knifeSkins
+                    knife_skins.update({str(items[item]["static_attrs"]["paintkit_proto_def_index"]): int(item)})
+
+        weapon_skins_list = {
+            "pistol_skins": pistol_skins,
+            "rocket_launcher_skins": rocket_launcher_skins,
+            "medicgun_skins": medicgun_skins,
+            "revolver_skins": revolver_skins,
+            "stickybomb_skins": stickybomb_skins,
+            "sniper_rifle_skins": sniper_rifle_skins,
+            "flame_thrower_skins": flame_thrower_skins,
+            "minigun_skins": minigun_skins,
+            "scattergun_skins": scattergun_skins,
+            "shotgun_skins": shotgun_skins,
+            "smg_skins": smg_skins,
+            "wrench_skins": wrench_skins,
+            "grenade_launcher_skins": grenade_launcher_skins,
+            "knife_skins": knife_skins
         }
-        return weaponSkinsList
+        return weapon_skins_list
 
 
-    # Gets schema overview
     @staticmethod
-    def getOverview(apiKey):
+    def get_overview(api_key : str) -> dict:
+        """
+        Gets the schema overview.
+        
+        Args:
+            api_key (str): The Steam Web API key.
+        
+        Returns:
+            dict: The schema overview.
+        """
         input = {
-            "key": apiKey,
+            "key": api_key,
             "language": "en"
         }
-        overview = WebRequest('GET', 'GetSchemaOverview', 'v0001', input)["result"]
+        overview = web_request('GET', 'GetSchemaOverview', 'v0001', input)["result"]
         del overview["status"]
         return overview
 
 
-    # Gets schema items
     @staticmethod
-    def getItems(apiKey):
-        return getAllSchemaItems(apiKey)
+    def get_items(api_key: str) -> list:
+        """
+        Gets the schema items.
+        
+        Args:
+            api_key (str): The Steam Web API key.
+        
+        Returns:
+            list: The schema items.
+        """
+        return get_all_schema_items(api_key)
 
 
-    # Gets skins / paintkits from TF2 protodefs
     @staticmethod
-    def getPaintKits():
+    def get_paint_kits() -> dict:
+        """
+        Gets the name and id of paint kits.
+        
+        Returns:
+            dict: The name and id of paint kits.
+        """
         response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/resource/tf_proto_obj_defs_english.txt', timeout=10)
         if response.status_code == 200:
             parsed = vdf.loads(response.text)
@@ -1471,18 +1535,24 @@ class Schema:
                 if name.startswith(DEF + ':'): continue
                 paintkits.append({"id": DEF, "name": name})
             paintkits = sorted(paintkits, key=lambda x:int(x["id"]))
-            paintkitsObj = {}
-            for paintKit in paintkits:
-                paintKitName = paintKit["name"]
-                if paintKitName not in [paintkitsObj[paintkit] for paintkit in paintkitsObj]:
-                    paintkitsObj[paintKit["id"]] = paintKit["name"]
-            return paintkitsObj
+            paintkits_obj = {}
+            for paint_kit in paintkits:
+                paint_kit_name = paint_kit["name"]
+                if paint_kit_name not in [paintkits_obj[paintkit] for paintkit in paintkits_obj]:
+                    paintkits_obj[paint_kit["id"]] = paint_kit["name"]
+            return paintkits_obj
         else:
             raise Exception("Failed to get paintkits.")
 
 
     @staticmethod
-    def getItemsGame():
+    def get_items_game() -> dict:
+        """
+        Gets the items game.
+        
+        Returns:
+            dict: The items game.
+        """
         response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/scripts/items/items_game.txt', timeout=10)
         if response.status_code == 200:
             return vdf.loads(response.text)["items_game"]
@@ -1490,25 +1560,39 @@ class Schema:
             raise Exception("Failed to get items game.")
 
 
-    # Creates data object used for initializing class
-    def toJSON(self):
+    def to_json(self) -> dict:
+        """
+        Creates a data object used for initializing the class.
+        
+        Returns:
+            dict: The data object used for initializing the class.
+        """
         return {"time": time.time(), "raw": self.raw}
 
 
-# Recursive function that requests all schema items
-def getAllSchemaItems(apiKey):
+def get_all_schema_items(api_key: str) -> list:
+    """
+    Recursively gets all schema items.
+    
+    Args:
+        api_key (str): The Steam Web API key.
+    
+    Returns:
+        list: The list of schema items.
+    """
     input = {
-        "key": apiKey,
+        "key": api_key,
         "language": "en"
     }
-    result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
+    result = web_request('GET', 'GetSchemaItems', 'v0001', input)
     items = result["result"]["items"]
     while "next" in result["result"]:
         input = {
-            "key": apiKey,
+            "key": api_key,
             "language": "en",
             "start": result["result"]["next"]
         }
-        result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
+        result = web_request('GET', 'GetSchemaItems', 'v0001', input)
         items = items + result["result"]["items"]
+        
     return items
