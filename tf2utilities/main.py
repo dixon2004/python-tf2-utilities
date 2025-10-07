@@ -2,6 +2,10 @@ import requests.exceptions
 from tf2utilities.schema import Schema
 from threading import Thread
 import time
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 
 class TF2:
@@ -23,15 +27,21 @@ class TF2:
             time.sleep(self.updateTime)
 
 
-    # Gets the schema from the TF2 API
+    # Gets the schema from the TF2 API with backup fallback
     def getSchema(self):
         if self.apiKey is not None:
-            while 1:
+            maxAttempts = 3
+            lastError = None
+
+            for attempt in range(maxAttempts):
                 try:
+                    logger.info(f"Fetching schema from API (attempt {attempt + 1}/{maxAttempts})...")
+
                     raw = {
                         "schema": Schema.getOverview(self.apiKey) | {"items": Schema.getItems(self.apiKey), "paintkits": Schema.getPaintKits()},
                         "items_game": Schema.getItemsGame()
                     }
+
                     if self.lite:
                         del raw["schema"]["originNames"]
                         del raw["schema"]["item_sets"]
@@ -74,8 +84,29 @@ class TF2:
                     schema = {"time": time.time(), "raw": raw}
                     if isinstance(schema, dict):
                         self.schema = Schema(schema)
+                        # Save successful schema as backup
+                        Schema.saveBackup(schema)
+                        logger.info("Schema fetched successfully from API")
+                        return
                     else:
-                        raise Exception("Schema is not a dict.") 
-                    break
-                except:
-                    time.sleep(10)
+                        raise Exception("Schema is not a dict.")
+
+                except Exception as e:
+                    lastError = e
+                    logger.error(f"Failed to fetch schema (attempt {attempt + 1}/{maxAttempts}): {str(e)}")
+                    if attempt < maxAttempts - 1:
+                        delay = 10 * (attempt + 1)
+                        logger.info(f"Retrying in {delay} seconds...")
+                        time.sleep(delay)
+
+            # All attempts failed, try loading from backup
+            logger.warning(f"All {maxAttempts} attempts to fetch schema from API failed. Trying backup schema...")
+            backupSchema = Schema.loadBackup()
+
+            if backupSchema is not None:
+                logger.info("Using backup schema")
+                self.schema = Schema(backupSchema)
+            else:
+                # No backup available, raise the error
+                logger.error("No backup schema available. Cannot initialize TF2 library.")
+                raise Exception(f"Failed to fetch schema after {maxAttempts} attempts and no backup available. Last error: {str(lastError)}")

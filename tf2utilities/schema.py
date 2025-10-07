@@ -1,10 +1,20 @@
 from tf2utilities.webapi import WebRequest
 from tf2utilities.sku import SKU
-import requests 
+import requests
 import time
 import math
 import vdf
 import re
+import json
+import os
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Backup schema directory
+BACKUP_DIR = os.path.join(os.path.expanduser('~'), '.tf2utilities')
+BACKUP_FILE = os.path.join(BACKUP_DIR, 'schema_backup.json')
 
 
 # munitionCrate = {
@@ -365,6 +375,42 @@ class Schema:
         self.effects = self.getParticleEffects()
         self.paintkits = self.getPaintKitsList()
         self.paints = self.getPaints()
+
+
+    # Save schema to backup file
+    @staticmethod
+    def saveBackup(schemaData):
+        try:
+            # Create backup directory if it doesn't exist
+            os.makedirs(BACKUP_DIR, exist_ok=True)
+
+            # Save schema to file
+            with open(BACKUP_FILE, 'w') as f:
+                json.dump(schemaData, f)
+
+            logger.info(f"Schema backup saved to {BACKUP_FILE}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to save schema backup: {str(e)}")
+            return False
+
+
+    # Load schema from backup file
+    @staticmethod
+    def loadBackup():
+        try:
+            if not os.path.exists(BACKUP_FILE):
+                logger.warning("No backup schema file found")
+                return None
+
+            with open(BACKUP_FILE, 'r') as f:
+                schemaData = json.load(f)
+
+            logger.info(f"Schema backup loaded from {BACKUP_FILE}")
+            return schemaData
+        except Exception as e:
+            logger.error(f"Failed to load schema backup: {str(e)}")
+            return None
 
 
     def getItemByNameWithThe(self, name):
@@ -1441,9 +1487,17 @@ class Schema:
             "key": apiKey,
             "language": "en"
         }
-        overview = WebRequest('GET', 'GetSchemaOverview', 'v0001', input)["result"]
-        del overview["status"]
-        return overview
+        try:
+            result = WebRequest('GET', 'GetSchemaOverview', 'v0001', input)
+            if result and "result" in result:
+                overview = result["result"]
+                del overview["status"]
+                return overview
+            else:
+                raise Exception("Invalid response structure from Steam API")
+        except Exception as e:
+            logger.error(f"Failed to get schema overview: {str(e)}")
+            raise
 
 
     # Gets schema items
@@ -1452,42 +1506,69 @@ class Schema:
         return getAllSchemaItems(apiKey)
 
 
-    # Gets skins / paintkits from TF2 protodefs
+    # Gets skins / paintkits from TF2 protodefs with retry logic
     @staticmethod
     def getPaintKits():
-        response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/resource/tf_proto_obj_defs_english.txt', timeout=10)
-        if response.status_code == 200:
-            parsed = vdf.loads(response.text)
-            protodefs = parsed["lang"]["Tokens"]
-            paintkits = []
-            for protodef in protodefs:
-                if protodef not in protodefs: continue
-                parts = protodef[0:protodef.index(' ')].split('_')
-                if len(parts) != 3: continue
-                type = parts[0]
-                if type != "9": continue
-                DEF = parts[1]
-                name = protodefs[protodef]
-                if name.startswith(DEF + ':'): continue
-                paintkits.append({"id": DEF, "name": name})
-            paintkits = sorted(paintkits, key=lambda x:int(x["id"]))
-            paintkitsObj = {}
-            for paintKit in paintkits:
-                paintKitName = paintKit["name"]
-                if paintKitName not in [paintkitsObj[paintkit] for paintkit in paintkitsObj]:
-                    paintkitsObj[paintKit["id"]] = paintKit["name"]
-            return paintkitsObj
-        else:
-            raise Exception("Failed to get paintkits.")
+        maxRetries = 3
+        lastException = None
+
+        for attempt in range(maxRetries):
+            try:
+                response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/resource/tf_proto_obj_defs_english.txt', timeout=10)
+                response.raise_for_status()
+
+                parsed = vdf.loads(response.text)
+                protodefs = parsed["lang"]["Tokens"]
+                paintkits = []
+                for protodef in protodefs:
+                    if protodef not in protodefs: continue
+                    parts = protodef[0:protodef.index(' ')].split('_')
+                    if len(parts) != 3: continue
+                    type = parts[0]
+                    if type != "9": continue
+                    DEF = parts[1]
+                    name = protodefs[protodef]
+                    if name.startswith(DEF + ':'): continue
+                    paintkits.append({"id": DEF, "name": name})
+                paintkits = sorted(paintkits, key=lambda x:int(x["id"]))
+                paintkitsObj = {}
+                for paintKit in paintkits:
+                    paintKitName = paintKit["name"]
+                    if paintKitName not in [paintkitsObj[paintkit] for paintkit in paintkitsObj]:
+                        paintkitsObj[paintKit["id"]] = paintKit["name"]
+                return paintkitsObj
+            except Exception as e:
+                lastException = e
+                if attempt < maxRetries - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f'Failed to get paintkits (attempt {attempt + 1}/{maxRetries}): {str(e)}. Retrying in {delay}s...')
+                    time.sleep(delay)
+                    continue
+
+        logger.error(f"Failed to get paintkits after {maxRetries} attempts")
+        raise Exception(f"Failed to get paintkits after {maxRetries} retries. Last error: {str(lastException)}")
 
 
     @staticmethod
     def getItemsGame():
-        response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/scripts/items/items_game.txt', timeout=10)
-        if response.status_code == 200:
-            return vdf.loads(response.text)["items_game"]
-        else:
-            raise Exception("Failed to get items game.")
+        maxRetries = 3
+        lastException = None
+
+        for attempt in range(maxRetries):
+            try:
+                response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/scripts/items/items_game.txt', timeout=10)
+                response.raise_for_status()
+                return vdf.loads(response.text)["items_game"]
+            except Exception as e:
+                lastException = e
+                if attempt < maxRetries - 1:
+                    delay = 2 ** attempt
+                    logger.warning(f'Failed to get items_game (attempt {attempt + 1}/{maxRetries}): {str(e)}. Retrying in {delay}s...')
+                    time.sleep(delay)
+                    continue
+
+        logger.error(f"Failed to get items_game after {maxRetries} attempts")
+        raise Exception(f"Failed to get items_game after {maxRetries} retries. Last error: {str(lastException)}")
 
 
     # Creates data object used for initializing class
@@ -1495,20 +1576,34 @@ class Schema:
         return {"time": time.time(), "raw": self.raw}
 
 
-# Recursive function that requests all schema items
+# Recursive function that requests all schema items with error handling
 def getAllSchemaItems(apiKey):
-    input = {
-        "key": apiKey,
-        "language": "en"
-    }
-    result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
-    items = result["result"]["items"]
-    while "next" in result["result"]:
+    try:
         input = {
             "key": apiKey,
-            "language": "en",
-            "start": result["result"]["next"]
+            "language": "en"
         }
         result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
-        items = items + result["result"]["items"]
-    return items
+
+        if not result or "result" not in result or "items" not in result["result"]:
+            raise Exception("Invalid response structure from Steam API")
+
+        items = result["result"]["items"]
+
+        while "next" in result["result"]:
+            input = {
+                "key": apiKey,
+                "language": "en",
+                "start": result["result"]["next"]
+            }
+            result = WebRequest('GET', 'GetSchemaItems', 'v0001', input)
+
+            if not result or "result" not in result or "items" not in result["result"]:
+                raise Exception("Invalid response structure from Steam API during pagination")
+
+            items = items + result["result"]["items"]
+
+        return items
+    except Exception as e:
+        logger.error(f"Failed to get all schema items: {str(e)}")
+        raise
