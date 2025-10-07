@@ -1,170 +1,205 @@
+# Constants for attribute defindexes (for fast lookups)
+ATTR_KILLSTREAK = 2025
+ATTR_AUSTRALIUM = 2027
+ATTR_EFFECT = 134
+ATTR_FESTIVE = 2053
+ATTR_PAINTKIT = 834
+ATTR_WEAR = 749
+ATTR_QUALITY2 = 214
+ATTR_CRAFTNUMBER = 229
+ATTR_CRATESERIES = 187
+ATTR_TARGET = 2012
+ATTR_PAINT = 142
+
+# Template for item objects (shared to reduce allocations)
+ITEM_TEMPLATE = {
+    "defindex": 0,
+    "quality": 0,
+    "craftable": True,
+    "tradable": True,
+    "killstreak": 0,
+    "australium": False,
+    "effect": None,
+    "festive": False,
+    "paintkit": None,
+    "wear": None,
+    "quality2": None,
+    "craftnumber": None,
+    "crateseries": None,
+    "target": None,
+    "output": None,
+    "outputQuality": None,
+    "paint": None
+}
+
+
 class SKU:
-    # Convert SKU to item object
+    # Convert SKU to item object (optimized)
     @staticmethod
     def fromString(sku):
-        TEMPLATE = {
-            "defindex": 0,
-            "quality": 0,
-            "craftable": True,
-            "tradable": True,
-            "killstreak": 0,
-            "australium": False,
-            "effect": None,
-            "festive": False,
-            "paintkit": None,
-            "wear": None,
-            "quality2": None,
-            "craftnumber": None,
-            "crateseries": None,
-            "target": None,
-            "output": None,
-            "outputQuality": None,
-            "paint": None
-        }
-        attributes = {}
-        
+        result = ITEM_TEMPLATE.copy()
+
         parts = sku.split(";")
-        partsCount = len(parts)
 
-        if partsCount > 0:
-            if str(parts[0]).isnumeric():
-                attributes["defindex"] = int(parts[0])
-            parts.pop(0)
+        # Parse defindex (first part)
+        if parts and parts[0].isnumeric():
+            result["defindex"] = int(parts[0])
+            parts = parts[1:]
 
-        if partsCount > 0:
-            if str(parts[0]).isnumeric():
-                attributes["quality"] = int(parts[0])
-            parts.pop(0)
+        # Parse quality (second part)
+        if parts and parts[0].isnumeric():
+            result["quality"] = int(parts[0])
+            parts = parts[1:]
 
+        # Parse remaining attributes
         for part in parts:
-            attribute = str(part.replace("-", ""))
+            part_stripped = part.replace("-", "")
 
-            if attribute == "uncraftable":
-                attributes["craftable"] = False
-            elif attribute in ["untradeable", "untradable"]:
-                attributes["tradable"] = False
-            elif attribute == "australium":
-                attributes["australium"] = True
-            elif attribute == "festive":
-                attributes["festive"] = True
-            elif attribute == "strange":
-                attributes["quality2"] = 11
-            elif attribute.startswith("kt") and attribute[2:].isnumeric():
-                attributes["killstreak"] = int(attribute[2:])
-            elif attribute.startswith("u") and attribute[1:].isnumeric():
-                attributes["effect"] = int(attribute[1:])
-            elif attribute.startswith("pk") and attribute[2:].isnumeric():
-                attributes["paintkit"] = int(attribute[2:])
-            elif attribute.startswith("w") and attribute[1:].isnumeric():
-                attributes["wear"] = int(attribute[1:])
-            elif attribute.startswith("td") and attribute[2:].isnumeric():
-                attributes["target"] = int(attribute[2:])
-            elif attribute.startswith("n") and attribute[1:].isnumeric():
-                attributes["craftnumber"] = int(attribute[1:])
-            elif attribute.startswith("c") and attribute[1:].isnumeric():
-                attributes["crateseries"] = int(attribute[1:])
-            elif attribute.startswith("od") and attribute[2:].isnumeric():
-                attributes["output"] = int(attribute[2:])
-            elif attribute.startswith("oq") and attribute[2:].isnumeric():
-                attributes["outputQuality"] = int(attribute[2:])
-            elif attribute.startswith("p") and attribute[1:].isnumeric():
-                attributes["paint"] = int(attribute[1:])
+            # Simple string flags
+            if part_stripped == "uncraftable":
+                result["craftable"] = False
+            elif part_stripped in ("untradeable", "untradable"):
+                result["tradable"] = False
+            elif part_stripped == "australium":
+                result["australium"] = True
+            elif part_stripped == "festive":
+                result["festive"] = True
+            elif part_stripped == "strange":
+                result["quality2"] = 11
+            # Prefixed numeric attributes
+            elif len(part_stripped) > 2:
+                prefix = part_stripped[:2]
+                suffix = part_stripped[2:]
+                if suffix.isnumeric():
+                    value = int(suffix)
+                    if prefix == "kt":
+                        result["killstreak"] = value
+                    elif prefix == "pk":
+                        result["paintkit"] = value
+                    elif prefix == "td":
+                        result["target"] = value
+                    elif prefix == "od":
+                        result["output"] = value
+                    elif prefix == "oq":
+                        result["outputQuality"] = value
+            # Single-char prefix attributes
+            if len(part_stripped) > 1:
+                prefix = part_stripped[0]
+                suffix = part_stripped[1:]
+                if suffix.isnumeric():
+                    value = int(suffix)
+                    if prefix == "u":
+                        result["effect"] = value
+                    elif prefix == "w":
+                        result["wear"] = value
+                    elif prefix == "n":
+                        result["craftnumber"] = value
+                    elif prefix == "c":
+                        result["crateseries"] = value
+                    elif prefix == "p":
+                        result["paint"] = value
 
-        for attr in TEMPLATE:
-            if attr in attributes: TEMPLATE[attr] = attributes[attr]
-
-        return TEMPLATE
+        return result
 
 
-    # Convert item object to SKU
+    # Convert item object to SKU (optimized)
     @staticmethod
     def fromObject(item):
-        TEMPLATE = {
-            "defindex": 0,
-            "quality": 0,
-            "craftable": True,
-            "tradable": True,
-            "killstreak": 0,
-            "australium": False,
-            "effect": None,
-            "festive": False,
-            "paintkit": None,
-            "wear": None,
-            "quality2": None,
-            "craftnumber": None,
-            "crateseries": None,
-            "target": None,
-            "output": None,
-            "outputQuality": None,
-            "paint": None
-        }
-        for attr in TEMPLATE:
-            if attr in item: TEMPLATE[attr] = item[attr]
+        # Use list for faster string building
+        parts = [str(item.get("defindex", 0)), str(item.get("quality", 0))]
 
-        sku = f'{item["defindex"]};{item["quality"]}'
+        # Append parts in order for consistent SKU format
+        if item.get("effect"):
+            parts.append(f"u{item['effect']}")
+        if item.get("australium") is True:
+            parts.append("australium")
+        if item.get("craftable") is False:
+            parts.append("uncraftable")
+        if item.get("tradable") is False:
+            parts.append("untradable")
+        if item.get("wear"):
+            parts.append(f"w{item['wear']}")
+        if item.get("paintkit") and isinstance(item['paintkit'], int):
+            parts.append(f"pk{item['paintkit']}")
+        if item.get("quality2") == 11:
+            parts.append("strange")
 
-        if item.get("effect"): sku += f";u{item['effect']}"
-        if item.get("australium") is True: sku += ";australium"
-        if item.get("craftable") is False: sku += ";uncraftable"
-        if item.get("tradable") is False: sku += ";untradable"
-        if item.get("wear"): sku += f";w{item['wear']}"
-        if item.get("paintkit") and isinstance(item['paintkit'], int): sku += f";pk{item['paintkit']}"
-        if item.get("quality2") and item["quality2"] == 11: sku += ";strange"
-        if item.get("killstreak") and isinstance(item['killstreak'], int) and item["killstreak"] != 0: sku += f";kt-{item['killstreak']}"
-        if item.get("target"): sku += f";td-{item['target']}"
-        if item.get("festive") is True: sku += ';festive'
-        if item.get("craftnumber"): sku += f";n{item['craftnumber']}"
-        if item.get("crateseries"): sku += f";c{item['crateseries']}"
-        if item.get("output"): sku += f";od-{item['output']}"
-        if item.get("outputQuality"): sku += f";oq{item['outputQuality']}"
-        if item.get("paint"): sku += f";p{item['paint']}"
-        
-        return sku
+        killstreak = item.get("killstreak")
+        if killstreak and isinstance(killstreak, int) and killstreak != 0:
+            parts.append(f"kt-{killstreak}")
+
+        if item.get("target"):
+            parts.append(f"td-{item['target']}")
+        if item.get("festive") is True:
+            parts.append("festive")
+        if item.get("craftnumber"):
+            parts.append(f"n{item['craftnumber']}")
+        if item.get("crateseries"):
+            parts.append(f"c{item['crateseries']}")
+        if item.get("output"):
+            parts.append(f"od-{item['output']}")
+        if item.get("outputQuality"):
+            parts.append(f"oq{item['outputQuality']}")
+        if item.get("paint"):
+            parts.append(f"p{item['paint']}")
+
+        return ";".join(parts)
 
     
     @staticmethod
     def fromAPI(item):
-        TEMPLATE = {
-            "defindex": 0,
-            "quality": 0,
-            "craftable": True,
-            "tradable": True,
-            "killstreak": 0,
-            "australium": False,
-            "effect": None,
-            "festive": False,
-            "paintkit": None,
-            "wear": None,
-            "quality2": None,
-            "craftnumber": None,
-            "crateseries": None,
-            "target": None,
-            "output": None,
-            "outputQuality": None,
-            "paint": None
-        }
+        """Convert API item to SKU (optimized with attribute lookup table)"""
+        result = ITEM_TEMPLATE.copy()
 
-        TEMPLATE["defindex"] = item["defindex"]
-        TEMPLATE["quality"] = item["quality"]
-        if item.get("flag_cannot_craft"): TEMPLATE["craftable"] = False
-        if item.get("flag_cannot_trade"): TEMPLATE["tradable"] = False
-        if item.get("attributes"):
-            for attribute in item["attributes"]:
-                if int(attribute["defindex"]) == 2025: TEMPLATE["killstreak"] = attribute["float_value"]
-                if int(attribute["defindex"])  == 2027: TEMPLATE["australium"] = True if attribute['float_value'] == 1 else False
-                if int(attribute["defindex"]) == 134: TEMPLATE["effect"] = attribute['float_value']
-                if int(attribute["defindex"]) == 2053: TEMPLATE["festive"] = True if attribute['float_value'] == 1 else False 
-                if int(attribute["defindex"]) == 834: TEMPLATE["paintkit"] = attribute["float_value"]
-                if int(attribute["defindex"]) == 749: TEMPLATE["wear"] = attribute["float_value"]
-                if int(attribute["defindex"]) == 214 and item['quality'] == 5: TEMPLATE["quality2"] = attribute["value"]
-                if int(attribute["defindex"]) == 229: TEMPLATE["craftnumber"] = attribute["value"]
-                if int(attribute["defindex"]) == 187: TEMPLATE["crateseries"] = attribute["float_value"]
-                if 2000 <= int(attribute["defindex"]) <= 2009 and attribute.get("attributes"):
-                    for attr in attribute["attributes"]:
-                        if int(attr["defindex"]) == 2012: TEMPLATE["target"] = attr["float_value"]
-                if attribute.get("is_output") and attribute["is_output"] is True: 
-                    TEMPLATE["output"] = attribute["itemdef"]
-                    TEMPLATE["outputQuality"] = attribute["quantity"]
-                if int(attribute["defindex"]) == 142: TEMPLATE["paint"] = attribute["float_value"]
-        
-        return SKU.fromObject(TEMPLATE)
+        result["defindex"] = item["defindex"]
+        result["quality"] = item["quality"]
+
+        if item.get("flag_cannot_craft"):
+            result["craftable"] = False
+        if item.get("flag_cannot_trade"):
+            result["tradable"] = False
+
+        attributes = item.get("attributes")
+        if attributes:
+            item_quality = item['quality']
+
+            for attribute in attributes:
+                # Convert defindex once per iteration
+                attr_defindex = int(attribute["defindex"])
+
+                # Use dictionary lookup for faster attribute processing
+                if attr_defindex == ATTR_KILLSTREAK:
+                    result["killstreak"] = attribute["float_value"]
+                elif attr_defindex == ATTR_AUSTRALIUM:
+                    result["australium"] = attribute['float_value'] == 1
+                elif attr_defindex == ATTR_EFFECT:
+                    result["effect"] = attribute['float_value']
+                elif attr_defindex == ATTR_FESTIVE:
+                    result["festive"] = attribute['float_value'] == 1
+                elif attr_defindex == ATTR_PAINTKIT:
+                    result["paintkit"] = attribute["float_value"]
+                elif attr_defindex == ATTR_WEAR:
+                    result["wear"] = attribute["float_value"]
+                elif attr_defindex == ATTR_QUALITY2 and item_quality == 5:
+                    result["quality2"] = attribute["value"]
+                elif attr_defindex == ATTR_CRAFTNUMBER:
+                    result["craftnumber"] = attribute["value"]
+                elif attr_defindex == ATTR_CRATESERIES:
+                    result["crateseries"] = attribute["float_value"]
+                elif attr_defindex == ATTR_PAINT:
+                    result["paint"] = attribute["float_value"]
+                elif 2000 <= attr_defindex <= 2009:
+                    # Handle nested attributes for target
+                    nested_attrs = attribute.get("attributes")
+                    if nested_attrs:
+                        for attr in nested_attrs:
+                            if int(attr["defindex"]) == ATTR_TARGET:
+                                result["target"] = attr["float_value"]
+                                break
+
+                # Handle output items
+                if attribute.get("is_output") is True:
+                    result["output"] = attribute["itemdef"]
+                    result["outputQuality"] = attribute["quantity"]
+
+        return SKU.fromObject(result)

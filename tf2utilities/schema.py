@@ -8,6 +8,7 @@ import re
 import json
 import os
 import logging
+from functools import lru_cache
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -376,6 +377,15 @@ class Schema:
         self.paintkits = self.getPaintKitsList()
         self.paints = self.getPaints()
 
+        # Build lookup indexes for O(1) item searches
+        self._buildItemIndexes()
+
+        # Pre-compute lowercase lookups for performance
+        self._effectsLower = {effect.lower(): effectId for effect, effectId in self.effects.items()}
+        self._qualitiesLower = {qual.lower(): qualId for qual, qualId in self.qualities.items()}
+        self._paintkitsLower = {pk.lower(): pkId for pk, pkId in self.paintkits.items()}
+        self._paintsLower = {paint.lower(): paintId for paint, paintId in self.paints.items()}
+
 
     # Save schema to backup file
     @staticmethod
@@ -413,22 +423,39 @@ class Schema:
             return None
 
 
-    def getItemByNameWithThe(self, name):
+    # Build lookup indexes for fast item searches
+    def _buildItemIndexes(self):
+        """Build hash maps for O(1) item lookups by name"""
+        self._itemsByName = {}
+        self._itemsByNameWithoutThe = {}
+
         items = self.raw["schema"]["items"]
-        
+
         for item in items:
-            if name.lower().replace("the ", "").strip() == item["item_name"].lower().replace("the ", ""):
-                if item["item_name"] == "Name Tag" and item["defindex"] == 2093:
-                    # skip and let it find Name Tag with defindex 5020
-                    continue
+            # Skip Name Tag with defindex 2093 (use 5020 instead)
+            if item["item_name"] == "Name Tag" and item["defindex"] == 2093:
+                continue
 
-                if item["item_quality"] == 0:
-                    # skip if Stock Quality
-                    continue
+            # Skip Stock Quality items
+            if item["item_quality"] == 0:
+                continue
 
-                return item
+            item_name_lower = item["item_name"].lower()
 
-        return None
+            # Index by exact name (lowercase)
+            if item_name_lower not in self._itemsByName:
+                self._itemsByName[item_name_lower] = item
+
+            # Index by name without "the " prefix
+            name_without_the = item_name_lower.replace("the ", "").strip()
+            if name_without_the not in self._itemsByNameWithoutThe:
+                self._itemsByNameWithoutThe[name_without_the] = item
+
+
+    def getItemByNameWithThe(self, name):
+        """Fast O(1) lookup using pre-built index"""
+        name_normalized = name.lower().replace("the ", "").strip()
+        return self._itemsByNameWithoutThe.get(name_normalized)
 
 
     # Gets sku
@@ -436,8 +463,21 @@ class Schema:
         return SKU.fromObject(self.getItemObjectFromName(name))
 
 
-    # Gets sku item object
+    # Cached wrapper for getItemObjectFromName
+    @lru_cache(maxsize=2048)
+    def _getItemObjectFromNameCached(self, name):
+        """Cached version of getItemObjectFromName for repeated lookups"""
+        return self._getItemObjectFromNameUncached(name)
+
+
+    # Public method with caching
     def getItemObjectFromName(self, name):
+        """Gets item object from name with caching for performance"""
+        return self._getItemObjectFromNameCached(name)
+
+
+    # Gets sku item object (internal uncached version)
+    def _getItemObjectFromNameUncached(self, name):
         name = name.lower()
         item = {
             "defindex": None,
@@ -538,13 +578,12 @@ class Schema:
                 qualitySearch = name.replace(ex, "").strip()
                 break
 
-        # Get all qualities
+        # Get all qualities (optimized with pre-computed lowercase lookups)
         schema = self.raw["schema"]
         if not any(ex in qualitySearch for ex in exception):
             # Make sure qualitySearch does not includes in the exception list
             # example: "Haunted Ghosts Vintage Tyrolean" - will skip this
-            for qualityC in self.qualities:
-                quality = qualityC.lower()
+            for quality, qualityId in self._qualitiesLower.items():
                 if quality == "collector's" and "collector's" in qualitySearch and 'chemistry set' in qualitySearch:
                     # Skip setting quality if item is Collector's Chemistrt Set
                     continue
@@ -554,14 +593,13 @@ class Schema:
                 if qualitySearch.startswith(quality):
                     name = name.replace(quality, "").strip()
                     item["quality2"] = item.get("quality2") or item.get("quality")
-                    item["quality"] = self.qualities[qualityC]
+                    item["quality"] = qualityId
                     break
 
-        # Check for effects
+        # Check for effects (optimized with pre-computed lowercase lookups)
         excludeAtomic = True if any(excludeName in name for excludeName in ["bonk! atomic punch", "atomic accolade"]) else False
 
-        for effectC in self.effects:
-            effect = effectC.lower()
+        for effect, effectId in self._effectsLower.items():
             if effect == "stardust" and "starduster" in name:
                 sub = name.replace("stardust", "").strip()
                 if "starduster" not in sub:
@@ -590,7 +628,7 @@ class Schema:
                 # Skip Frostbite effect if name include Faunted Braken
                 continue
 
-            if effect == "hot": 
+            if effect == "hot":
                 # shotgun # shot to hell
                 # plaid potshotter # shot in the dark
                 if not item.get("wear"):
@@ -615,7 +653,7 @@ class Schema:
                 continue
             if effect in name:
                 name = name.replace(effect, "", 1).strip()
-                item["effect"] = self.effects[effectC]
+                item["effect"] = effectId
                 if  item["effect"] == 4:
                     if item["quality"] is None:
                         item["quality"] = 5
@@ -626,8 +664,7 @@ class Schema:
                 break
 
         if item.get("wear"):
-            for paintkitC in self.paintkits:
-                paintkit = paintkitC.lower()
+            for paintkit, paintkitId in self._paintkitsLower.items():
                 if "mk.ii" in name and "mk.ii" not in paintkit:
                     continue
                 if "(green)" in name and "(green)" not in paintkit:
@@ -636,7 +673,7 @@ class Schema:
                     continue
                 if paintkit in name:
                     name = name.replace(paintkit, "").replace("|", "").strip()
-                    item["paintkit"] = self.paintkits[paintkitC]
+                    item["paintkit"] = paintkitId
                     if item.get("effect") is not None:
                         if item.get("quality") == 5 and item.get("quality2") == 11:
                             if not isExplicitElevatedStrange:
@@ -684,11 +721,10 @@ class Schema:
 
         if "(paint: " in name:
             name = name.replace("(paint: ", "").replace(")", "").strip()
-            for paintC in self.paints:
-                paint = paintC.lower()
+            for paint, paintId in self._paintsLower.items():
                 if paint in name:
                     name = name.replace(paint, "").strip()
-                    item["paint"] = self.paints[paintC]
+                    item["paint"] = paintId
                     break
 
         if "kit fabricator" in name and item["killstreak"] > 1:
@@ -851,21 +887,8 @@ class Schema:
 
     # Gets schema item by item name
     def getItemByItemName(self, name):
-        items = self.raw["schema"]["items"]
-
-        for item in items:
-            if name.lower() == item["item_name"].lower():
-                if item["item_name"] == "Name Tag" and item["defindex"] == 2093:
-                    # skip and let it find Name Tag with defindex 5020
-                    continue
-
-                if item["item_quality"] == 0:
-                    # skip if Stock Quality
-                    continue
-
-                return item
-        
-        return None
+        """Fast O(1) lookup using pre-built index"""
+        return self._itemsByName.get(name.lower())
 
 
     # Gets schema item by sku

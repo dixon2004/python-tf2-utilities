@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/c/Users/vytal/OneDrive/Desktop/Liquid GH/python-tf2-utilities/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
