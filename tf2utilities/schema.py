@@ -558,7 +558,7 @@ class Schema:
             item["festive"] = True
 
         # Try to find quality name in name
-        exception = [
+        exception = {
             'haunted ghosts',
             'haunted phantasm jr',
             'haunted phantasm',
@@ -569,8 +569,9 @@ class Schema:
             'vintage merryweather',
             'haunted kraken',
             'haunted forever!',
-            'haunted cremation'
-        ]
+            'haunted cremation',
+            "haunted mist",
+        }
 
         qualitySearch = name
         for ex in exception:
