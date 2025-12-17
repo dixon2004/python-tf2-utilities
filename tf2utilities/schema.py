@@ -625,8 +625,8 @@ class Schema:
             if effect == "haunted" and "haunted kraken" in name:
                 # Skip Haunted effect if name include Haunted Kraken
                 continue
-            if effect == "frostbite" and "frostbite bonnet" in name:
-                # Skip Frostbite effect if name include Faunted Braken
+            if effect == "frostbite" and ("frostbite bonnet" in name or "frostbite fit" in name):
+                # Skip Frostbite effect for items with Frostbite in their name
                 continue
 
             if effect == "hot":
