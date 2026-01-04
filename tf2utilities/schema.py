@@ -290,7 +290,8 @@ class Schema:
             'haunted kraken',
             'haunted forever!',
             'haunted cremation',
-            "haunted wick"
+            "haunted wick",
+            "haunted mist"
         ]
 
         quality_search = name
