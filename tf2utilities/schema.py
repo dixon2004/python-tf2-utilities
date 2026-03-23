@@ -1523,7 +1523,7 @@ class Schema:
         """
         response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/resource/tf_proto_obj_defs_english.txt', timeout=10)
         if response.status_code == 200:
-            parsed = vdf.loads(response.text)
+            parsed = vdf.loads(response.text.replace('\x00', ''))
             protodefs = parsed["lang"]["Tokens"]
             paintkits = []
             for protodef in protodefs:
@@ -1557,7 +1557,7 @@ class Schema:
         """
         response = requests.get('https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/scripts/items/items_game.txt', timeout=10)
         if response.status_code == 200:
-            return vdf.loads(response.text)["items_game"]
+            return vdf.loads(response.text.replace('\x00', ''))["items_game"]
         else:
             raise Exception("Failed to get items game.")
 
