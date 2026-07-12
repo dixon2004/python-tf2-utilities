@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tf2-utilities"
+version = "4.0.0"
+description = "Get information about TF2 items, effects, skins and more"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Johnny Black", email = "lokedixon@hotmail.my" }]
+requires-python = ">=3.10"
+dependencies = ["requests", "vdf", "msgspec"]
+keywords = ["tf2", "teamfortress2", "steam", "trade", "trading"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/j0hnnyblack/python-tf2-utilities"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tf2utilities"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enable import sorting (I) on top of the default E/F rules.
+extend-select = ["I"]
+# E701: the library intentionally uses single-line "if cond: stmt" guards throughout.
+ignore = ["E701"]
+
+[tool.ruff.lint.per-file-ignores]
+# Dev scripts intentionally insert the project root on sys.path before importing the package.
+"scripts/*" = ["E402"]
+
+[tool.pyright]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"

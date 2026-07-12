@@ -18,7 +18,7 @@ pip install tf2-utilities
 ```
 
 ### Prerequisites:
-- Python 3.9 or later
+- Python 3.10 or later
 - A Steam Web API key (obtain it from [here](https://steamcommunity.com/dev/apikey))
 
 ## Getting Started
@@ -92,10 +92,16 @@ item_sku = SKU.from_object(item_object)
 print(item_sku) # Output: "5021;6"
 ```
 
-- Convert Steam API Data to Item SKU
+- Convert Steam Inventory API Data to Item SKU
+
+`SKU.from_API` converts an item *description* object from the Steam Community inventory
+endpoint (e.g. `https://steamcommunity.com/inventory/<steamid>/440/2?l=english`) into a SKU.
 ```py
-item_sku = SKU.from_API(item_data)
-print(item_sku) # Output: SKU based on API data
+schema = TF2(api_key="your_steam_api_key").schema
+
+# item is one entry from the inventory response's "descriptions" array
+item_sku = SKU.from_API(item, schema)
+print(item_sku) # Output: SKU based on the inventory item
 ```
 
 ## Configuration

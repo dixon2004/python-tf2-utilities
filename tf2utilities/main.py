@@ -1,13 +1,14 @@
-from tf2utilities.schema import Schema
-from threading import Thread
 import time
+from threading import Thread
+
+from tf2utilities.schema import Schema
 
 
 class TF2:
 
     def __init__(
             self, 
-            api_key: str = None, 
+            api_key: str = "", 
             auto_update: bool = False, 
             update_time: int = 24 * 60 * 60, 
             lite: bool = False
@@ -27,7 +28,7 @@ class TF2:
         self.schema = None
         self.lite = lite
 
-        if self.update_time is True: Thread(target=self.updater, daemon=True).start()
+        if self.auto_update: Thread(target=self.updater, daemon=True).start()
         if self.schema is None: self.get_schema()
 
 
@@ -44,7 +45,7 @@ class TF2:
         """
         Gets the schema from the TF2 API.
         """
-        if self.api_key is not None:
+        if self.api_key != "":
             raw = {
                 "schema": Schema.get_overview(self.api_key) | {"items": Schema.get_items(self.api_key), "paintkits": Schema.get_paint_kits()},
                 "items_game": Schema.get_items_game()
@@ -56,41 +57,4 @@ class TF2:
                 del raw["schema"]["item_levels"]
                 del raw["schema"]["string_lookups"]
 
-                del raw["items_game"]["game_info"]
-                del raw["items_game"]["qualities"]
-                del raw["items_game"]["colors"]
-                del raw["items_game"]["rarities"]
-                del raw["items_game"]["equip_regions_list"]
-                del raw["items_game"]["equip_conflicts"]
-                del raw["items_game"]["quest_objective_conditions"]
-                del raw["items_game"]["item_series_types"]
-                del raw["items_game"]["item_collections"]
-                del raw["items_game"]["operations"]
-                del raw["items_game"]["prefabs"]
-                del raw["items_game"]["attributes"]
-                del raw["items_game"]["item_criteria_templates"]
-                del raw["items_game"]["random_attribute_templates"]
-                del raw["items_game"]["lootlist_job_template_definitions"]
-                del raw["items_game"]["item_sets"]
-                del raw["items_game"]["client_loot_lists"]
-                del raw["items_game"]["revolving_loot_lists"]
-                del raw["items_game"]["recipes"]
-                del raw["items_game"]["achievement_rewards"]
-                del raw["items_game"]["attribute_controlled_attached_particles"]
-                del raw["items_game"]["armory_data"]
-                del raw["items_game"]["item_levels"]
-                del raw["items_game"]["kill_eater_score_types"]
-                del raw["items_game"]["mvm_maps"]
-                del raw["items_game"]["mvm_tours"]
-                del raw["items_game"]["matchmaking_categories"]
-                del raw["items_game"]["maps"]
-                del raw["items_game"]["master_maps_list"]
-                del raw["items_game"]["steam_packages"]
-                del raw["items_game"]["community_market_item_remaps"]
-                del raw["items_game"]["war_definitions"]
-
-            schema = {"time": time.time(), "raw": raw}
-            if isinstance(schema, dict): 
-                self.schema = Schema(schema)
-            else:
-                raise Exception("Schema is not a dict.")
+            self.schema = Schema({"time": time.time(), "raw": raw})
