@@ -378,7 +378,7 @@ def _api_elevated_quality(item: dict, paintkit: Optional[int], quality: Optional
         _api_get_tag(item, "Type") == "Cosmetic" and quality == 5
         and "Strange" in item_type and "Points Scored" in item_type
     )
-    is_other_items_not_strange_quality = item_type.startswith("Strange") and quality != 11
+    is_other_items_not_strange_quality = item_type.removeprefix("Limited ").startswith("Strange") and quality != 11
 
     if has_stat_clock or is_unusual_hat or is_other_items_not_strange_quality:
         if isinstance(paintkit, int):
